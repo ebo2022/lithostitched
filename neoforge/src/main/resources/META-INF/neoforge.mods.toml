@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[48,)"
+loaderVersion = "[1,)"
 issueTrackerURL = "https://github.com/Apollounknowndev/lithostitched/issues"
 license = "MIT"
 
@@ -11,16 +11,25 @@ license = "MIT"
     authors = "Apollo, SmellyModder"
     description = '''Library mod with new configurability and compatibility enhancements for worldgen.'''
 
+[[mixins]]
+config = "lithostitched.mixins.json"
+
+[[mixins]]
+config = "lithostitched.neoforge.mixins.json"
+
+[[accessTransformers]]
+file = "META-INF/accesstransformer.cfg"
+
 [[dependencies.lithostitched]]
-    modId = "forge"
-    mandatory = true
-    versionRange = "[48,)"
+    modId = "neoforge"
+    type = "required"
+    versionRange = "(20.4,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.lithostitched]]
     modId = "minecraft"
-    mandatory = true
-    versionRange = "[1.20.2,1.21)"
+    type = "required"
+    versionRange = "[1.20.5,1.21)"
     ordering = "NONE"
     side = "BOTH"

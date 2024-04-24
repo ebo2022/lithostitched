@@ -1,9 +1,11 @@
 package dev.worldgen.lithostitched.worldgen.feature.config;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -20,8 +22,9 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootTable;
 
-public record DungeonFeatureConfig(int minOpenings, int maxOpenings, IntProvider radius, int maxChests, SimpleWeightedRandomList<EntityType<?>> spawnerMobs, BlockStateProvider floorProvider, BlockStateProvider wallProvider, TagKey<Block> dungeonInvalidBlocks, ResourceLocation lootTable) implements FeatureConfiguration {
+public record DungeonFeatureConfig(int minOpenings, int maxOpenings, IntProvider radius, int maxChests, SimpleWeightedRandomList<EntityType<?>> spawnerMobs, BlockStateProvider floorProvider, BlockStateProvider wallProvider, TagKey<Block> dungeonInvalidBlocks, ResourceKey<LootTable> lootTable) implements FeatureConfiguration {
     private static final SimpleWeightedRandomList<EntityType<?>> DEFAULT_MOBS = SimpleWeightedRandomList.<EntityType<?>>builder().add(EntityType.ZOMBIE, 2).add(EntityType.SKELETON, 1).add(EntityType.SPIDER, 1).build();
     private static final SimpleWeightedRandomList<BlockState> DEFAULT_FLOOR = SimpleWeightedRandomList.<BlockState>builder().add(Blocks.MOSSY_COBBLESTONE.defaultBlockState(), 3).add(Blocks.COBBLESTONE.defaultBlockState(), 1).build();
 
@@ -34,6 +37,6 @@ public record DungeonFeatureConfig(int minOpenings, int maxOpenings, IntProvider
         BlockStateProvider.CODEC.fieldOf("floor_provider").orElse(new WeightedStateProvider(DEFAULT_FLOOR)).forGetter(DungeonFeatureConfig::floorProvider),
         BlockStateProvider.CODEC.fieldOf("wall_provider").orElse(SimpleStateProvider.simple(Blocks.COBBLESTONE)).forGetter(DungeonFeatureConfig::wallProvider),
         TagKey.codec(Registries.BLOCK).fieldOf("dungeon_invalid_blocks").orElse(BlockTags.FEATURES_CANNOT_REPLACE).forGetter(DungeonFeatureConfig::dungeonInvalidBlocks),
-        ResourceLocation.CODEC.fieldOf("loot_table").orElse(BuiltInLootTables.SIMPLE_DUNGEON).forGetter(DungeonFeatureConfig::lootTable)
+        ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("loot_table").orElse(BuiltInLootTables.SIMPLE_DUNGEON).forGetter(DungeonFeatureConfig::lootTable)
     ).apply(instance, DungeonFeatureConfig::new));
 }

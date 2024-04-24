@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import dev.worldgen.lithostitched.mixin.common.StructureSetAccessor;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @author Apollo
  */
 public class RemoveStructuresFromStructureSetModifier extends Modifier {
-    public static final Codec<RemoveStructuresFromStructureSetModifier> CODEC = RecordCodecBuilder.create(instance -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<RemoveStructuresFromStructureSetModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
         ResourceLocation.CODEC.fieldOf("structure_set").forGetter(RemoveStructuresFromStructureSetModifier::rawStructureSetLocation),
         Structure.CODEC.listOf().fieldOf("structures").forGetter(RemoveStructuresFromStructureSetModifier::entries),
         RegistryOps.retrieveGetter(Registries.STRUCTURE_SET)
@@ -63,7 +63,7 @@ public class RemoveStructuresFromStructureSetModifier extends Modifier {
     }
 
     @Override
-    public Codec<? extends Modifier> codec() {
+    public MapCodec<? extends Modifier> codec() {
         return CODEC;
     }
 }

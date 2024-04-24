@@ -2,25 +2,29 @@ package dev.worldgen.lithostitched.registry;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
+import com.mojang.serialization.MapCodec;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import dev.worldgen.lithostitched.worldgen.modifier.*;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import dev.worldgen.lithostitched.worldgen.surface.LithostitchedSurfaceRules;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
 
-import static dev.worldgen.lithostitched.LithostitchedCommon.LOGGER;
 import static dev.worldgen.lithostitched.LithostitchedCommon.createResourceKey;
+import static dev.worldgen.lithostitched.registry.LithostitchedMaterialRules.TRANSIENT_MERGED;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 /**
@@ -29,21 +33,21 @@ import java.util.function.BiConsumer;
  * @author SmellyModder (Luke Tonon)
  */
 public final class LithostitchedBuiltInRegistries {
-	public static final WritableRegistry<Codec<? extends Modifier>> MODIFIER_TYPE = FabricRegistryBuilder.createSimple(LithostitchedRegistries.MODIFIER_TYPE).buildAndRegister();
-	public static final WritableRegistry<Codec<? extends ModifierPredicate>> MODIFIER_PREDICATE_TYPE = FabricRegistryBuilder.createSimple(LithostitchedRegistries.MODIFIER_PREDICATE_TYPE).buildAndRegister();
+	public static final WritableRegistry<MapCodec<? extends Modifier>> MODIFIER_TYPE = FabricRegistryBuilder.createSimple(LithostitchedRegistries.MODIFIER_TYPE).buildAndRegister();
+	public static final WritableRegistry<MapCodec<? extends ModifierPredicate>> MODIFIER_PREDICATE_TYPE = FabricRegistryBuilder.createSimple(LithostitchedRegistries.MODIFIER_PREDICATE_TYPE).buildAndRegister();
 
 	public static void init() {
-		Registry.register(BuiltInRegistries.MATERIAL_RULE, LithostitchedMaterialRules.TRANSIENT_MERGED, LithostitchedSurfaceRules.TransientMergedRuleSource.CODEC.codec());
+		Registry.register(BuiltInRegistries.MATERIAL_RULE, TRANSIENT_MERGED, LithostitchedSurfaceRules.TransientMergedRuleSource.CODEC.codec());
 
 
 		LithostitchedCommon.registerCommonModifiers((name, codec) -> {
-			MODIFIER_TYPE.register(createResourceKey(LithostitchedRegistries.MODIFIER_TYPE, name), codec, Lifecycle.stable());
+			MODIFIER_TYPE.register(createResourceKey(LithostitchedRegistries.MODIFIER_TYPE, name), codec, RegistrationInfo.BUILT_IN);
 		});
 		registerFabricModifiers((name, codec) -> {
-			MODIFIER_TYPE.register(createResourceKey(LithostitchedRegistries.MODIFIER_TYPE, name), codec, Lifecycle.stable());
+			MODIFIER_TYPE.register(createResourceKey(LithostitchedRegistries.MODIFIER_TYPE, name), codec, RegistrationInfo.BUILT_IN);
 		});
 		LithostitchedCommon.registerCommonModifierPredicates((name, codec) -> {
-			MODIFIER_PREDICATE_TYPE.register(createResourceKey(LithostitchedRegistries.MODIFIER_PREDICATE_TYPE, name), codec, Lifecycle.stable());
+			MODIFIER_PREDICATE_TYPE.register(createResourceKey(LithostitchedRegistries.MODIFIER_PREDICATE_TYPE, name), codec, RegistrationInfo.BUILT_IN);
 		});
 
 
@@ -51,22 +55,22 @@ public final class LithostitchedBuiltInRegistries {
 			Registry.register(BuiltInRegistries.FEATURE, createResourceKey(Registries.FEATURE, name), feature);
 		});
 		LithostitchedCommon.registerCommonPoolElementTypes((name, codec) -> {
-			Registry.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, createResourceKey(Registries.STRUCTURE_POOL_ELEMENT, name), () -> (Codec<StructurePoolElement>)codec);
+			Registry.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, createResourceKey(Registries.STRUCTURE_POOL_ELEMENT, name), () -> (MapCodec<StructurePoolElement>)codec);
 		});
 		LithostitchedCommon.registerCommonStructureTypes((name, codec) -> {
-			Registry.register(BuiltInRegistries.STRUCTURE_TYPE, createResourceKey(Registries.STRUCTURE_TYPE, name), () -> (Codec<Structure>)codec);
+			Registry.register(BuiltInRegistries.STRUCTURE_TYPE, createResourceKey(Registries.STRUCTURE_TYPE, name), () -> (MapCodec<Structure>)codec);
 		});
 		LithostitchedCommon.registerCommonStructureProcessors((name, codec) -> {
-			Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR, createResourceKey(Registries.STRUCTURE_PROCESSOR, name), () -> (Codec<StructureProcessor>)codec);
+			Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR, createResourceKey(Registries.STRUCTURE_PROCESSOR, name), () -> (MapCodec<StructureProcessor>)codec);
 		});
 		LithostitchedCommon.registerCommonBlockEntityModifiers((name, codec) -> {
-			Registry.register(BuiltInRegistries.RULE_BLOCK_ENTITY_MODIFIER, createResourceKey(Registries.RULE_BLOCK_ENTITY_MODIFIER, name), () -> (Codec<RuleBlockEntityModifier>)codec);
+			Registry.register(BuiltInRegistries.RULE_BLOCK_ENTITY_MODIFIER, createResourceKey(Registries.RULE_BLOCK_ENTITY_MODIFIER, name), () -> (MapCodec<RuleBlockEntityModifier>)codec);
 		});
 
 		DynamicRegistries.register(LithostitchedRegistries.WORLDGEN_MODIFIER, Modifier.CODEC);
 	}
 
-	public static void registerFabricModifiers(BiConsumer<String, Codec<? extends Modifier>> consumer) {
+	public static void registerFabricModifiers(BiConsumer<String, MapCodec<? extends Modifier>> consumer) {
 		consumer.accept("add_biome_spawns", AddBiomeSpawnsModifier.CODEC);
 		consumer.accept("add_features", AddFeaturesModifier.CODEC);
 		consumer.accept("remove_features", RemoveFeaturesModifier.CODEC);

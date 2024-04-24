@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.HolderSet;
@@ -16,7 +16,7 @@ import net.neoforged.neoforge.common.world.BiomeModifiers;
  * @author Apollo
  */
 public class RemoveBiomeSpawnsModifier extends AbstractBiomeModifier {
-    public static final Codec<RemoveBiomeSpawnsModifier> CODEC = RecordCodecBuilder.create(instance -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<RemoveBiomeSpawnsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(RemoveBiomeSpawnsModifier::biomes),
         RegistryCodecs.homogeneousList(Registries.ENTITY_TYPE).fieldOf("mobs").forGetter(RemoveBiomeSpawnsModifier::mobs)
     )).apply(instance, RemoveBiomeSpawnsModifier::new));
@@ -38,7 +38,7 @@ public class RemoveBiomeSpawnsModifier extends AbstractBiomeModifier {
 
 
     @Override
-    public Codec<? extends Modifier> codec() {
+    public MapCodec<? extends Modifier> codec() {
         return CODEC;
     }
 }

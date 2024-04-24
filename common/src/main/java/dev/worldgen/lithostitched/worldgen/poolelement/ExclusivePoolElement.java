@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.List;
 
+
 public abstract class ExclusivePoolElement extends StructurePoolElement {
     private final StructurePoolElement delegate;
 

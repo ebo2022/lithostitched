@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import dev.worldgen.lithostitched.worldgen.blockentitymodifier.ApplyAll;
 import dev.worldgen.lithostitched.worldgen.blockentitymodifier.ApplyRandom;
 import dev.worldgen.lithostitched.worldgen.feature.DungeonFeature;
@@ -47,16 +47,17 @@ public final class LithostitchedCommon {
 		return ResourceKey.create(resourceKey, new ResourceLocation(MOD_ID, name));
 	}
 
-	public static void registerCommonModifiers(BiConsumer<String, Codec<? extends Modifier>> consumer) {
+	public static void registerCommonModifiers(BiConsumer<String, MapCodec<? extends Modifier>> consumer) {
 		consumer.accept("no_op", NoOpModifier.CODEC);
 		consumer.accept("add_structure_set_entries", AddStructureSetEntriesModifier.CODEC);
 		consumer.accept("remove_structures_from_structure_set", RemoveStructuresFromStructureSetModifier.CODEC);
 		consumer.accept("add_surface_rule", AddSurfaceRuleModifier.CODEC);
 		consumer.accept("add_template_pool_elements", AddTemplatePoolElementsModifier.CODEC);
+		consumer.accept("add_pool_aliases", AddPoolAliasesModifier.CODEC);
 		consumer.accept("redirect_feature", RedirectFeatureModifier.CODEC);
 	}
 
-	public static void registerCommonModifierPredicates(BiConsumer<String, Codec<? extends ModifierPredicate>> consumer) {
+	public static void registerCommonModifierPredicates(BiConsumer<String, MapCodec<? extends ModifierPredicate>> consumer) {
 		consumer.accept("all_of", AllOfModifierPredicate.CODEC);
 		consumer.accept("any_of", AnyOfModifierPredicate.CODEC);
 		consumer.accept("mod_loaded", ModLoadedModifierPredicate.CODEC);
@@ -69,23 +70,23 @@ public final class LithostitchedCommon {
 		consumer.accept("well", new WellFeature(WellFeatureConfig.CODEC));
 	}
 
-	public static void registerCommonPoolElementTypes(BiConsumer<String, Codec<? extends StructurePoolElement>> consumer) {
+	public static void registerCommonPoolElementTypes(BiConsumer<String, MapCodec<? extends StructurePoolElement>> consumer) {
 		consumer.accept("limited", LimitedPoolElement.CODEC);
 		consumer.accept("guaranteed", GuaranteedPoolElement.CODEC);
 	}
 
-	public static void registerCommonStructureTypes(BiConsumer<String, Codec<? extends Structure>> consumer) {
+	public static void registerCommonStructureTypes(BiConsumer<String, MapCodec<? extends Structure>> consumer) {
 		consumer.accept("jigsaw", AlternateJigsawStructure.CODEC);
 	}
 
-	public static void registerCommonStructureProcessors(BiConsumer<String, Codec<? extends StructureProcessor>> consumer) {
+	public static void registerCommonStructureProcessors(BiConsumer<String, MapCodec<? extends StructureProcessor>> consumer) {
 		consumer.accept("reference", ReferenceStructureProcessor.CODEC);
 		consumer.accept("apply_random", ApplyRandomStructureProcessor.CODEC);
 		consumer.accept("block_swap", BlockSwapStructureProcessor.CODEC);
 		consumer.accept("condition", ConditionStructureProcessor.CODEC);
 	}
 
-	public static void registerCommonBlockEntityModifiers(BiConsumer<String, Codec<? extends RuleBlockEntityModifier>> consumer) {
+	public static void registerCommonBlockEntityModifiers(BiConsumer<String, MapCodec<? extends RuleBlockEntityModifier>> consumer) {
 		consumer.accept("apply_random", ApplyRandom.CODEC);
 		consumer.accept("apply_all", ApplyAll.CODEC);
 	}

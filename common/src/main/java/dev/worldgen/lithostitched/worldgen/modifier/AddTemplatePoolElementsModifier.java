@@ -2,6 +2,7 @@ package dev.worldgen.lithostitched.worldgen.modifier;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import dev.worldgen.lithostitched.access.StructurePoolAccess;
@@ -27,13 +28,13 @@ import java.util.List;
  * @author Apollo
  */
 public class  AddTemplatePoolElementsModifier extends Modifier {
-    public static final Codec<AddTemplatePoolElementsModifier> CODEC = RecordCodecBuilder.create(instance -> addModifierFields(instance).and(instance.group(
-            ResourceLocation.CODEC.fieldOf("template_pool").forGetter(AddTemplatePoolElementsModifier::rawTemplatePoolLocation),
-            Codec.mapPair(
-                    StructurePoolElement.CODEC.fieldOf("element"),
-                    Codec.intRange(1, 150).fieldOf("weight")
-            ).codec().listOf().fieldOf("elements").forGetter(AddTemplatePoolElementsModifier::elements),
-            RegistryOps.retrieveGetter(Registries.TEMPLATE_POOL)
+    public static final MapCodec<AddTemplatePoolElementsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
+        ResourceLocation.CODEC.fieldOf("template_pool").forGetter(AddTemplatePoolElementsModifier::rawTemplatePoolLocation),
+        Codec.mapPair(
+            StructurePoolElement.CODEC.fieldOf("element"),
+            Codec.intRange(1, 150).fieldOf("weight")
+        ).codec().listOf().fieldOf("elements").forGetter(AddTemplatePoolElementsModifier::elements),
+        RegistryOps.retrieveGetter(Registries.TEMPLATE_POOL)
     )).apply(instance, AddTemplatePoolElementsModifier::new));
 
     private final ResourceKey<StructureTemplatePool> EMPTY_TEMPLATE_POOL = ResourceKey.create(Registries.TEMPLATE_POOL, new ResourceLocation(LithostitchedCommon.MOD_ID, "empty"));
@@ -61,7 +62,7 @@ public class  AddTemplatePoolElementsModifier extends Modifier {
     }
 
     @Override
-    public Codec<? extends Modifier> codec() {
+    public MapCodec<? extends Modifier> codec() {
         return CODEC;
     }
 

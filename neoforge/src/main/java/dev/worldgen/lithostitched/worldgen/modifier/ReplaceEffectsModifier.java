@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.registry.LithostitchedNeoforgeBiomeModifiers;
 import dev.worldgen.lithostitched.worldgen.biome.BiomeEffects;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.biome.Biome;
  * @author Apollo
  */
 public class ReplaceEffectsModifier extends AbstractBiomeModifier {
-    public static final Codec<ReplaceEffectsModifier> CODEC = RecordCodecBuilder.create((instance) -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<ReplaceEffectsModifier> CODEC = RecordCodecBuilder.mapCodec((instance) -> addModifierFields(instance).and(instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(ReplaceEffectsModifier::biomes),
         BiomeEffects.CODEC.fieldOf("effects").forGetter(ReplaceEffectsModifier::effects)
     )).apply(instance, ReplaceEffectsModifier::new));
@@ -35,7 +35,7 @@ public class ReplaceEffectsModifier extends AbstractBiomeModifier {
     }
 
     @Override
-    public Codec<? extends Modifier> codec() {
+    public MapCodec<? extends Modifier> codec() {
         return CODEC;
     }
 }

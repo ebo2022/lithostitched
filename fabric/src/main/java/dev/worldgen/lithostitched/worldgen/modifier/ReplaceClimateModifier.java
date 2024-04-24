@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.mixin.common.BiomeAccessor;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
@@ -16,7 +16,7 @@ import java.util.List;
  * @author Apollo
  */
 public class ReplaceClimateModifier extends Modifier {
-    public static final Codec<ReplaceClimateModifier> CODEC = RecordCodecBuilder.create((instance) -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<ReplaceClimateModifier> CODEC = RecordCodecBuilder.mapCodec((instance) -> addModifierFields(instance).and(instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(ReplaceClimateModifier::biomes),
         Biome.ClimateSettings.CODEC.fieldOf("climate").forGetter(ReplaceClimateModifier::climateSettings)
     )).apply(instance, ReplaceClimateModifier::new));
@@ -49,7 +49,7 @@ public class ReplaceClimateModifier extends Modifier {
     }
 
     @Override
-    public Codec<? extends Modifier> codec() {
+    public MapCodec<? extends Modifier> codec() {
         return CODEC;
     }
 }

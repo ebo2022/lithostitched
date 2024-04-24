@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched.worldgen.blockentitymodifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public record ApplyRandom(SimpleWeightedRandomList<RuleBlockEntityModifier> modifiers) implements RuleBlockEntityModifier {
-    public static final Codec<ApplyRandom> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ApplyRandom> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         SimpleWeightedRandomList.wrappedCodec(RuleBlockEntityModifier.CODEC).fieldOf("modifiers").forGetter(ApplyRandom::modifiers)
     ).apply(instance, ApplyRandom::new));
 

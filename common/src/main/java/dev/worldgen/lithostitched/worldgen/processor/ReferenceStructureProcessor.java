@@ -1,6 +1,7 @@
 package dev.worldgen.lithostitched.worldgen.processor;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -12,7 +13,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import org.jetbrains.annotations.NotNull;
 
 public class ReferenceStructureProcessor extends StructureProcessor {
-    public static final Codec<ReferenceStructureProcessor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ReferenceStructureProcessor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         RegistryCodecs.homogeneousList(Registries.PROCESSOR_LIST, StructureProcessorType.DIRECT_CODEC).fieldOf("processor_lists").forGetter(ReferenceStructureProcessor::processorLists)
     ).apply(instance, ReferenceStructureProcessor::new));
 

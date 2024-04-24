@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'maven-publish'
-    id 'fabric-loom' version '1.2-SNAPSHOT'
+    id 'fabric-loom' version '1.6-SNAPSHOT'
     id "me.modmuss50.mod-publish-plugin" version "0.4.5"
 }
 
@@ -11,7 +11,7 @@ base {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
+    minecraft "com.mojang:minecraft:1.20.5-rc3"
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
@@ -73,20 +73,22 @@ publishing {
 
 publishMods {
     file = remapJar.archiveFile
-    changelog = "- Fixed template pool injection with Lithostitched's custom jigsaw structure type\n- Added `dungeon` and `well` feature types, see wiki for details"
+    changelog = "${update_changelog}"
     type = STABLE
     modLoaders.add("fabric")
-    displayName = "%s ~ Fabric 1.20.4".formatted(project.version)
+    displayName = "%s ~ Fabric 1.20.5".formatted(project.version)
+
+    dryRun = false
 
     modrinth {
         accessToken = providers.environmentVariable("TOKEN_MR")
         projectId = "XaDC71GB"
-        minecraftVersions.add("1.20.4")
+        minecraftVersions.add("1.20.5-rc3")
     }
 
-    curseforge {
+    /*curseforge {
         accessToken = providers.environmentVariable("TOKEN_CF")
         projectId = "936015"
-        minecraftVersions.add("1.20.4")
-    }
+        minecraftVersions.add("1.20.5-rc3")
+    }*/
 }

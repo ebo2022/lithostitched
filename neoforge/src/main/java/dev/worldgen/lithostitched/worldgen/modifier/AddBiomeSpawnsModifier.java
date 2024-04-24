@@ -2,6 +2,7 @@ package dev.worldgen.lithostitched.worldgen.modifier;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.HolderSet;
@@ -17,7 +18,7 @@ import java.util.List;
  * @author Apollo
  */
 public class AddBiomeSpawnsModifier extends AbstractBiomeModifier {
-    public static final Codec<AddBiomeSpawnsModifier> CODEC = RecordCodecBuilder.create(instance -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<AddBiomeSpawnsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(AddBiomeSpawnsModifier::biomes),
         Codec.mapEither(
             SpawnerData.CODEC.listOf().fieldOf("spawners"),
@@ -48,7 +49,7 @@ public class AddBiomeSpawnsModifier extends AbstractBiomeModifier {
 
 
     @Override
-    public Codec<? extends Modifier> codec() {
+    public MapCodec<? extends Modifier> codec() {
         return CODEC;
     }
 }

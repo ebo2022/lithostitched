@@ -1,6 +1,7 @@
 package dev.worldgen.lithostitched.worldgen.processor;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.TrueModifierPredicate;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import org.jetbrains.annotations.NotNull;
 
 public class ConditionStructureProcessor extends StructureProcessor {
-    public static final Codec<ConditionStructureProcessor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ConditionStructureProcessor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ModifierPredicate.CODEC.fieldOf("predicate").orElse(TrueModifierPredicate.INSTANCE).forGetter(ConditionStructureProcessor::predicate),
         StructureProcessorType.SINGLE_CODEC.fieldOf("processor").forGetter(ConditionStructureProcessor::processor)
     ).apply(instance, ConditionStructureProcessor::new));

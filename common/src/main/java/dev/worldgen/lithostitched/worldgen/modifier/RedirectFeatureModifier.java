@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import dev.worldgen.lithostitched.mixin.common.PlacedFeatureAccessor;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class RedirectFeatureModifier extends Modifier {
-    public static final Codec<RedirectFeatureModifier> CODEC = RecordCodecBuilder.create(instance -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<RedirectFeatureModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
         ResourceLocation.CODEC.fieldOf("placed_feature").forGetter(RedirectFeatureModifier::rawPlacedFeatureLocation),
         ConfiguredFeature.CODEC.fieldOf("redirect_to").forGetter(RedirectFeatureModifier::redirectTo),
         RegistryOps.retrieveGetter(Registries.PLACED_FEATURE)
@@ -52,7 +52,7 @@ public class RedirectFeatureModifier extends Modifier {
     }
 
     @Override
-    public Codec<? extends Modifier> codec() {
+    public MapCodec<? extends Modifier> codec() {
         return CODEC;
     }
 }

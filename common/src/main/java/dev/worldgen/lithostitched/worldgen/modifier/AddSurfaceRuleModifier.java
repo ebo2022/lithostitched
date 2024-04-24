@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.registries.Registries;
@@ -18,7 +18,7 @@ import java.util.HashSet;
  * @author Apollo
  */
 public class AddSurfaceRuleModifier extends Modifier {
-    public static final Codec<AddSurfaceRuleModifier> CODEC = RecordCodecBuilder.create(instance -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<AddSurfaceRuleModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
         ResourceKey.codec(Registries.LEVEL_STEM).listOf().xmap(HashSet::new, ArrayList::new).fieldOf("levels").forGetter(AddSurfaceRuleModifier::levels),
         SurfaceRules.RuleSource.CODEC.fieldOf("surface_rule").forGetter(AddSurfaceRuleModifier::surfaceRule)
     )).apply(instance, AddSurfaceRuleModifier::new));
@@ -41,7 +41,7 @@ public class AddSurfaceRuleModifier extends Modifier {
     public void applyModifier() {}
 
     @Override
-    public Codec<? extends Modifier> codec() {
+    public MapCodec<? extends Modifier> codec() {
         return AddSurfaceRuleModifier.CODEC;
     }
 }

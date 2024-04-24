@@ -100,9 +100,7 @@ public class DungeonFeature extends Feature<DungeonFeatureConfig> {
                         if (solidFaces == 1) {
                             this.safeSetBlock(world, chestPos, StructurePiece.reorient(world, chestPos, Blocks.CHEST.defaultBlockState()), predicate);
                             Optional<ChestBlockEntity> chestEntity = world.getBlockEntity(chestPos, BlockEntityType.CHEST);
-                            if (chestEntity.isPresent()) {
-                                chestEntity.get().setLootTable(config.lootTable(), random.nextLong());
-                            }
+                            chestEntity.ifPresent(chestBlockEntity -> chestBlockEntity.setLootTable(config.lootTable(), random.nextLong()));
                             break;
                         }
                     }

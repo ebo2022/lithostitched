@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.81'
+    id 'net.neoforged.gradle.userdev' version '7.0.107'
     id 'java-library'
     id "me.modmuss50.mod-publish-plugin" version "0.4.5"
 }
@@ -80,20 +80,22 @@ publishing {
 
 publishMods {
     file = jar.archiveFile
-    changelog = "- Fixed template pool injection with Lithostitched's custom jigsaw structure type\n- Added `dungeon` and `well` feature types, see wiki for details"
+    changelog = "${update_changelog}"
     type = STABLE
     modLoaders.add("neoforge")
-    displayName = "%s ~ Neoforge 1.20.4".formatted(project.version)
+    displayName = "%s ~ Neoforge 1.20.5".formatted(project.version)
+
+    dryRun = true
 
     modrinth {
         accessToken = providers.environmentVariable("TOKEN_MR")
         projectId = "XaDC71GB"
-        minecraftVersions.add("1.20.4")
+        minecraftVersions.add("1.20.5")
     }
 
     curseforge {
         accessToken = providers.environmentVariable("TOKEN_CF")
         projectId = "936015"
-        minecraftVersions.add("1.20.4")
+        minecraftVersions.add("1.20.5")
     }
 }

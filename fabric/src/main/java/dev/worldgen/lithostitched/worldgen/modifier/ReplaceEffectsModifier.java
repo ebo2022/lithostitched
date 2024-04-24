@@ -1,6 +1,7 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.mixin.common.BiomeAccessor;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
@@ -8,11 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.biome.AmbientAdditionsSettings;
-import net.minecraft.world.level.biome.AmbientMoodSettings;
-import net.minecraft.world.level.biome.AmbientParticleSettings;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeSpecialEffects;
+import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.biome.BiomeSpecialEffects.Builder;
 
 import java.util.List;
@@ -25,7 +22,7 @@ import java.util.Optional;
  */
 public class ReplaceEffectsModifier extends Modifier {
 
-    public static final Codec<ReplaceEffectsModifier> CODEC = RecordCodecBuilder.create((instance) -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<ReplaceEffectsModifier> CODEC = RecordCodecBuilder.mapCodec((instance) -> addModifierFields(instance).and(instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(ReplaceEffectsModifier::biomes),
         ModdedBiomeEffects.CODEC.fieldOf("effects").forGetter(ReplaceEffectsModifier::effects)
     )).apply(instance, ReplaceEffectsModifier::new));
@@ -92,7 +89,7 @@ public class ReplaceEffectsModifier extends Modifier {
     }
 
     @Override
-    public Codec<? extends Modifier> codec() {
+    public MapCodec<? extends Modifier> codec() {
         return CODEC;
     }
 

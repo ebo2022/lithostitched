@@ -6,7 +6,9 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "common.GameTestServerMixin",
+    "common.JigsawStructureAccessor",
     "common.PlacedFeatureAccessor",
+    "common.PoolAliasLookupMixin",
     "common.StructureSetAccessor",
     "common.StructureTemplatePoolAccessor",
     "common.StructureTemplatePoolMixin"

@@ -1,13 +1,13 @@
 package dev.worldgen.lithostitched.worldgen.poolelement;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 
 public class GuaranteedPoolElement extends ExclusivePoolElement {
-    public static final Codec<GuaranteedPoolElement> CODEC = RecordCodecBuilder.create(instance -> addDelegateField(instance).and(instance.group(
+    public static final MapCodec<GuaranteedPoolElement> CODEC = RecordCodecBuilder.mapCodec(instance -> addDelegateField(instance).and(instance.group(
         ExtraCodecs.POSITIVE_INT.fieldOf("count").forGetter(GuaranteedPoolElement::count),
         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_depth").forGetter(GuaranteedPoolElement::minDepth)
     )).apply(instance, GuaranteedPoolElement::new));

@@ -1,6 +1,7 @@
 package dev.worldgen.lithostitched.worldgen.processor;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import net.minecraft.core.BlockPos;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import org.jetbrains.annotations.NotNull;
 
 public class ApplyRandomStructureProcessor extends StructureProcessor {
-    public static final Codec<ApplyRandomStructureProcessor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<ApplyRandomStructureProcessor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             SimpleWeightedRandomList.wrappedCodec(StructureProcessorType.LIST_CODEC).fieldOf("processor_lists").forGetter(ApplyRandomStructureProcessor::processorLists)
     ).apply(instance, ApplyRandomStructureProcessor::new));
 

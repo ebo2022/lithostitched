@@ -1,11 +1,11 @@
 package dev.worldgen.lithostitched.registry;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.worldgen.biome.BiomeEffects;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.world.level.biome.*;
+import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeSpecialEffectsBuilder;
 import net.neoforged.neoforge.common.world.ClimateSettingsBuilder;
@@ -13,7 +13,7 @@ import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
 
 public class LithostitchedNeoforgeBiomeModifiers {
     public record ReplaceClimateBiomeModifier(HolderSet<Biome> biomes, Biome.ClimateSettings climateSettings) implements BiomeModifier {
-        public static final Codec<ReplaceClimateBiomeModifier> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+        public static final MapCodec<ReplaceClimateBiomeModifier> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             Biome.LIST_CODEC.fieldOf("biomes").forGetter(ReplaceClimateBiomeModifier::biomes),
             Biome.ClimateSettings.CODEC.fieldOf("climate").forGetter(ReplaceClimateBiomeModifier::climateSettings)
         ).apply(builder, ReplaceClimateBiomeModifier::new));
@@ -30,13 +30,13 @@ public class LithostitchedNeoforgeBiomeModifiers {
         }
 
         @Override
-        public Codec<? extends BiomeModifier> codec()
+        public MapCodec<? extends BiomeModifier> codec()
         {
             return CODEC;
         }
     }
     public record ReplaceEffectsBiomeModifier(HolderSet<Biome> biomes, BiomeEffects specialEffects) implements BiomeModifier {
-        public static final Codec<ReplaceEffectsBiomeModifier> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+        public static final MapCodec<ReplaceEffectsBiomeModifier> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
             Biome.LIST_CODEC.fieldOf("biomes").forGetter(ReplaceEffectsBiomeModifier::biomes),
             BiomeEffects.CODEC.fieldOf("effects").forGetter(ReplaceEffectsBiomeModifier::specialEffects)
         ).apply(builder, ReplaceEffectsBiomeModifier::new));
@@ -83,11 +83,9 @@ public class LithostitchedNeoforgeBiomeModifiers {
         }
 
         @Override
-        public Codec<? extends BiomeModifier> codec()
+        public MapCodec<? extends BiomeModifier> codec()
         {
             return CODEC;
         }
     }
-
-
 }

@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched.registry;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import dev.worldgen.lithostitched.worldgen.modifier.*;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
@@ -13,7 +13,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.world.BiomeModifier;
-import net.neoforged.neoforge.registries.*;
+import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.function.BiConsumer;
 
@@ -23,23 +26,23 @@ import static dev.worldgen.lithostitched.LithostitchedCommon.createResourceKey;
  * Built-in registries for Lithostitched on Neoforge.
  */
 public final class LithostitchedBuiltInRegistries {
-	private static final DeferredRegister<Codec<? extends Modifier>> DEFERRED_MODIFIER_TYPES = DeferredRegister.create(LithostitchedRegistries.MODIFIER_TYPE, LithostitchedCommon.MOD_ID);
-	public static final Registry<Codec<? extends Modifier>> MODIFIER_TYPE = DEFERRED_MODIFIER_TYPES.makeRegistry(builder -> builder.sync(false));
+	private static final DeferredRegister<MapCodec<? extends Modifier>> DEFERRED_MODIFIER_TYPES = DeferredRegister.create(LithostitchedRegistries.MODIFIER_TYPE, LithostitchedCommon.MOD_ID);
+	public static final Registry<MapCodec<? extends Modifier>> MODIFIER_TYPE = DEFERRED_MODIFIER_TYPES.makeRegistry(builder -> builder.sync(false));
 
-	private static final DeferredRegister<Codec<? extends ModifierPredicate>> DEFERRED_MODIFIER_PREDICATES_TYPES = DeferredRegister.create(LithostitchedRegistries.MODIFIER_PREDICATE_TYPE, LithostitchedCommon.MOD_ID);
-	public static final Registry<Codec<? extends ModifierPredicate>> MODIFIER_PREDICATE_TYPE = DEFERRED_MODIFIER_PREDICATES_TYPES.makeRegistry(builder -> builder.sync(false));
+	private static final DeferredRegister<MapCodec<? extends ModifierPredicate>> DEFERRED_MODIFIER_PREDICATES_TYPES = DeferredRegister.create(LithostitchedRegistries.MODIFIER_PREDICATE_TYPE, LithostitchedCommon.MOD_ID);
+	public static final Registry<MapCodec<? extends ModifierPredicate>> MODIFIER_PREDICATE_TYPE = DEFERRED_MODIFIER_PREDICATES_TYPES.makeRegistry(builder -> builder.sync(false));
 
-	private static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, "lithostitched");
+	private static final DeferredRegister<MapCodec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, "lithostitched");
 	public static void init(IEventBus bus) {
 
 		bus.addListener((RegisterEvent event) -> {
 			event.register(Registries.MATERIAL_RULE, helper -> helper.register(createResourceKey(Registries.MATERIAL_RULE, "transient_merged"), LithostitchedSurfaceRules.TransientMergedRuleSource.CODEC.codec()));
 
 			LithostitchedCommon.registerCommonFeatureTypes((name, feature) -> event.register(Registries.FEATURE, helper -> helper.register(createResourceKey(Registries.FEATURE, name), feature)));
-			LithostitchedCommon.registerCommonPoolElementTypes((name, codec) -> event.register(Registries.STRUCTURE_POOL_ELEMENT, helper -> helper.register(createResourceKey(Registries.STRUCTURE_POOL_ELEMENT, name), () -> (Codec<StructurePoolElement>)codec)));
-			LithostitchedCommon.registerCommonStructureTypes((name, codec) -> event.register(Registries.STRUCTURE_TYPE, helper -> helper.register(createResourceKey(Registries.STRUCTURE_TYPE, name), () -> (Codec<Structure>)codec)));
-			LithostitchedCommon.registerCommonStructureProcessors((name, codec) -> event.register(Registries.STRUCTURE_PROCESSOR, helper -> helper.register(createResourceKey(Registries.STRUCTURE_PROCESSOR, name), () -> (Codec<StructureProcessor>)codec)));
-			LithostitchedCommon.registerCommonBlockEntityModifiers((name, codec) -> event.register(Registries.RULE_BLOCK_ENTITY_MODIFIER, helper -> helper.register(createResourceKey(Registries.RULE_BLOCK_ENTITY_MODIFIER, name), () -> (Codec<RuleBlockEntityModifier>)codec)));
+			LithostitchedCommon.registerCommonPoolElementTypes((name, codec) -> event.register(Registries.STRUCTURE_POOL_ELEMENT, helper -> helper.register(createResourceKey(Registries.STRUCTURE_POOL_ELEMENT, name), () -> (MapCodec<StructurePoolElement>)codec)));
+			LithostitchedCommon.registerCommonStructureTypes((name, codec) -> event.register(Registries.STRUCTURE_TYPE, helper -> helper.register(createResourceKey(Registries.STRUCTURE_TYPE, name), () -> (MapCodec<Structure>)codec)));
+			LithostitchedCommon.registerCommonStructureProcessors((name, codec) -> event.register(Registries.STRUCTURE_PROCESSOR, helper -> helper.register(createResourceKey(Registries.STRUCTURE_PROCESSOR, name), () -> (MapCodec<StructureProcessor>)codec)));
+			LithostitchedCommon.registerCommonBlockEntityModifiers((name, codec) -> event.register(Registries.RULE_BLOCK_ENTITY_MODIFIER, helper -> helper.register(createResourceKey(Registries.RULE_BLOCK_ENTITY_MODIFIER, name), () -> (MapCodec<RuleBlockEntityModifier>)codec)));
 		});
 
 		bus.addListener((DataPackRegistryEvent.NewRegistry event) -> {
@@ -58,7 +61,7 @@ public final class LithostitchedBuiltInRegistries {
 
 	}
 
-	public static void registerForgeModifiers(BiConsumer<String, Codec<? extends Modifier>> consumer) {
+	public static void registerForgeModifiers(BiConsumer<String, MapCodec<? extends Modifier>> consumer) {
 		consumer.accept("add_biome_spawns", AddBiomeSpawnsModifier.CODEC);
 		consumer.accept("add_features", AddFeaturesModifier.CODEC);
 		consumer.accept("remove_biome_spawns", RemoveBiomeSpawnsModifier.CODEC);
@@ -67,7 +70,7 @@ public final class LithostitchedBuiltInRegistries {
 		consumer.accept("replace_effects", ReplaceEffectsModifier.CODEC);
 	}
 
-	public static void registerForgeBiomeModifiers(BiConsumer<String, Codec<? extends BiomeModifier>> consumer) {
+	public static void registerForgeBiomeModifiers(BiConsumer<String, MapCodec<? extends BiomeModifier>> consumer) {
 		consumer.accept("replace_climate", LithostitchedNeoforgeBiomeModifiers.ReplaceClimateBiomeModifier.CODEC);
 		consumer.accept("replace_effects", LithostitchedNeoforgeBiomeModifiers.ReplaceEffectsBiomeModifier.CODEC);
 	}

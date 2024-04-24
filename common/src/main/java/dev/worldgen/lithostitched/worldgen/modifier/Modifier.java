@@ -2,6 +2,7 @@ package dev.worldgen.lithostitched.worldgen.modifier;
 
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.registry.LithostitchedRegistries;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
@@ -9,7 +10,6 @@ import dev.worldgen.lithostitched.worldgen.modifier.predicate.TrueModifierPredic
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
  */
 public abstract class Modifier {
     @SuppressWarnings("unchecked")
-    public static final Codec<Modifier> CODEC = ExtraCodecs.lazyInitializedCodec(() -> {
+    public static final Codec<Modifier> CODEC = Codec.lazyInitialized(() -> {
         var modifierRegistry = BuiltInRegistries.REGISTRY.get(LithostitchedRegistries.MODIFIER_TYPE.location());
         if (modifierRegistry == null) throw new NullPointerException("Worldgen modifier registry does not exist yet!");
-        return ((Registry<Codec<? extends Modifier>>) modifierRegistry).byNameCodec();
+        return ((Registry<MapCodec<? extends Modifier>>) modifierRegistry).byNameCodec();
     }).dispatch(Modifier::codec, Function.identity());
 
     private final ModifierPredicate predicate;
@@ -49,7 +49,7 @@ public abstract class Modifier {
     }
     public abstract void applyModifier();
 
-    public abstract Codec<? extends Modifier> codec();
+    public abstract MapCodec<? extends Modifier> codec();
 
     // Apply all worldgen modifiers in the worldgen modifier registry
     public static void applyModifiers(MinecraftServer server) {

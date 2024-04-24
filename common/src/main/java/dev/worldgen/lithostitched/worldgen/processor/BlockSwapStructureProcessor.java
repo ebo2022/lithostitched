@@ -1,6 +1,7 @@
 package dev.worldgen.lithostitched.worldgen.processor;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import net.minecraft.core.BlockPos;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 public class BlockSwapStructureProcessor extends StructureProcessor {
 
-    public static final Codec<BlockSwapStructureProcessor> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<BlockSwapStructureProcessor> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.unboundedMap(ResourceLocation.CODEC, ResourceLocation.CODEC).fieldOf("blocks").forGetter(BlockSwapStructureProcessor::blockSwapMap)
     ).apply(instance, BlockSwapStructureProcessor::new));
 

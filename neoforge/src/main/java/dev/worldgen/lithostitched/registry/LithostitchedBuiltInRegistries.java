@@ -40,6 +40,7 @@ public final class LithostitchedBuiltInRegistries {
 
 			LithostitchedCommon.registerCommonFeatureTypes((name, feature) -> event.register(Registries.FEATURE, helper -> helper.register(createResourceKey(Registries.FEATURE, name), feature)));
 			LithostitchedCommon.registerCommonPoolElementTypes((name, codec) -> event.register(Registries.STRUCTURE_POOL_ELEMENT, helper -> helper.register(createResourceKey(Registries.STRUCTURE_POOL_ELEMENT, name), () -> (MapCodec<StructurePoolElement>)codec)));
+			LithostitchedCommon.registerCommonPoolAliasBindings((name, codec) -> event.register(Registries.POOL_ALIAS_BINDING, helper -> helper.register(createResourceKey(Registries.POOL_ALIAS_BINDING, name), codec)));
 			LithostitchedCommon.registerCommonStructureTypes((name, codec) -> event.register(Registries.STRUCTURE_TYPE, helper -> helper.register(createResourceKey(Registries.STRUCTURE_TYPE, name), () -> (MapCodec<Structure>)codec)));
 			LithostitchedCommon.registerCommonStructureProcessors((name, codec) -> event.register(Registries.STRUCTURE_PROCESSOR, helper -> helper.register(createResourceKey(Registries.STRUCTURE_PROCESSOR, name), () -> (MapCodec<StructureProcessor>)codec)));
 			LithostitchedCommon.registerCommonBlockEntityModifiers((name, codec) -> event.register(Registries.RULE_BLOCK_ENTITY_MODIFIER, helper -> helper.register(createResourceKey(Registries.RULE_BLOCK_ENTITY_MODIFIER, name), () -> (MapCodec<RuleBlockEntityModifier>)codec)));

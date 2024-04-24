@@ -1,7 +1,5 @@
 package dev.worldgen.lithostitched.registry;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.MapCodec;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import dev.worldgen.lithostitched.worldgen.modifier.*;
@@ -14,18 +12,15 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
 
+import java.util.function.BiConsumer;
+
 import static dev.worldgen.lithostitched.LithostitchedCommon.createResourceKey;
 import static dev.worldgen.lithostitched.registry.LithostitchedMaterialRules.TRANSIENT_MERGED;
-
-import java.util.Optional;
-import java.util.function.BiConsumer;
 
 /**
  * Built-in registries for Lithostitched on Fabric.
@@ -56,6 +51,9 @@ public final class LithostitchedBuiltInRegistries {
 		});
 		LithostitchedCommon.registerCommonPoolElementTypes((name, codec) -> {
 			Registry.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, createResourceKey(Registries.STRUCTURE_POOL_ELEMENT, name), () -> (MapCodec<StructurePoolElement>)codec);
+		});
+		LithostitchedCommon.registerCommonPoolAliasBindings((name, codec) -> {
+			Registry.register(BuiltInRegistries.POOL_ALIAS_BINDING_TYPE, createResourceKey(Registries.POOL_ALIAS_BINDING, name), codec);
 		});
 		LithostitchedCommon.registerCommonStructureTypes((name, codec) -> {
 			Registry.register(BuiltInRegistries.STRUCTURE_TYPE, createResourceKey(Registries.STRUCTURE_TYPE, name), () -> (MapCodec<Structure>)codec);

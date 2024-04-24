@@ -9,6 +9,7 @@ import dev.worldgen.lithostitched.worldgen.feature.config.DungeonFeatureConfig;
 import dev.worldgen.lithostitched.worldgen.feature.config.WellFeatureConfig;
 import dev.worldgen.lithostitched.worldgen.modifier.*;
 import dev.worldgen.lithostitched.worldgen.modifier.predicate.*;
+import dev.worldgen.lithostitched.worldgen.poolalias.ApplyWithChance;
 import dev.worldgen.lithostitched.worldgen.poolelement.GuaranteedPoolElement;
 import dev.worldgen.lithostitched.worldgen.poolelement.LimitedPoolElement;
 import dev.worldgen.lithostitched.worldgen.processor.ApplyRandomStructureProcessor;
@@ -22,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasBinding;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
 import org.slf4j.Logger;
@@ -74,6 +76,11 @@ public final class LithostitchedCommon {
 		consumer.accept("limited", LimitedPoolElement.CODEC);
 		consumer.accept("guaranteed", GuaranteedPoolElement.CODEC);
 	}
+
+	public static void registerCommonPoolAliasBindings(BiConsumer<String, MapCodec<? extends PoolAliasBinding>> consumer) {
+		consumer.accept("apply_with_chance", ApplyWithChance.CODEC);
+	}
+
 
 	public static void registerCommonStructureTypes(BiConsumer<String, MapCodec<? extends Structure>> consumer) {
 		consumer.accept("jigsaw", AlternateJigsawStructure.CODEC);

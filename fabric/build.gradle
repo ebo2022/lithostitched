@@ -83,12 +83,12 @@ publishMods {
     modrinth {
         accessToken = providers.environmentVariable("TOKEN_MR")
         projectId = "XaDC71GB"
-        minecraftVersions.add("1.20.5-rc3")
+        minecraftVersions.add("1.20.5")
     }
 
-    /*curseforge {
+    curseforge {
         accessToken = providers.environmentVariable("TOKEN_CF")
         projectId = "936015"
-        minecraftVersions.add("1.20.5-rc3")
-    }*/
+        minecraftVersions.add("1.20.5")
+    }
 }

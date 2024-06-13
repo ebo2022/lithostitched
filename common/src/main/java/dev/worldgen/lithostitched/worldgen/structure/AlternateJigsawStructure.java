@@ -47,9 +47,9 @@ public class AlternateJigsawStructure extends Structure {
     @Override
     public @NotNull Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
         ChunkPos chunkPos = context.chunkPos();
-        int i = this.config.startHeight().sample(context.random(), new WorldGenerationContext(context.chunkGenerator(), context.heightAccessor()));
+        int i = config.startHeight().sample(context.random(), new WorldGenerationContext(context.chunkGenerator(), context.heightAccessor()));
         BlockPos blockPos = new BlockPos(chunkPos.getMinBlockX(), i, chunkPos.getMinBlockZ());
-        return AlternateJigsawGenerator.generate(context, this.config, this.config.size().sample(context.random()), blockPos, PoolAliasLookup.create(this.config.poolAliases(), blockPos, context.seed()));
+        return AlternateJigsawGenerator.generate(context, config, config.size().sample(context.random()), blockPos, PoolAliasLookup.create(config.poolAliases(), blockPos, context.seed()));
     }
 
     @Override

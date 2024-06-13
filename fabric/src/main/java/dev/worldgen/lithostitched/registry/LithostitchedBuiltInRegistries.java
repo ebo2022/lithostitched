@@ -3,7 +3,6 @@ package dev.worldgen.lithostitched.registry;
 import com.mojang.serialization.MapCodec;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import dev.worldgen.lithostitched.worldgen.modifier.*;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import dev.worldgen.lithostitched.worldgen.surface.LithostitchedSurfaceRules;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistries;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -29,7 +28,6 @@ import static dev.worldgen.lithostitched.registry.LithostitchedMaterialRules.TRA
  */
 public final class LithostitchedBuiltInRegistries {
 	public static final WritableRegistry<MapCodec<? extends Modifier>> MODIFIER_TYPE = FabricRegistryBuilder.createSimple(LithostitchedRegistries.MODIFIER_TYPE).buildAndRegister();
-	public static final WritableRegistry<MapCodec<? extends ModifierPredicate>> MODIFIER_PREDICATE_TYPE = FabricRegistryBuilder.createSimple(LithostitchedRegistries.MODIFIER_PREDICATE_TYPE).buildAndRegister();
 
 	public static void init() {
 		Registry.register(BuiltInRegistries.MATERIAL_RULE, TRANSIENT_MERGED, LithostitchedSurfaceRules.TransientMergedRuleSource.CODEC.codec());
@@ -40,9 +38,6 @@ public final class LithostitchedBuiltInRegistries {
 		});
 		registerFabricModifiers((name, codec) -> {
 			MODIFIER_TYPE.register(createResourceKey(LithostitchedRegistries.MODIFIER_TYPE, name), codec, RegistrationInfo.BUILT_IN);
-		});
-		LithostitchedCommon.registerCommonModifierPredicates((name, codec) -> {
-			MODIFIER_PREDICATE_TYPE.register(createResourceKey(LithostitchedRegistries.MODIFIER_PREDICATE_TYPE, name), codec, RegistrationInfo.BUILT_IN);
 		});
 
 

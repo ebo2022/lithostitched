@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.mixin.common.BiomeAccessor;
 import dev.worldgen.lithostitched.mixin.common.BiomeGenerationSettingsAccessor;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.biome.Biome;
@@ -19,33 +18,12 @@ import java.util.List;
  *
  * @author Apollo
  */
-public class RemoveFeaturesModifier extends Modifier {
-    public static final MapCodec<RemoveFeaturesModifier> CODEC = RecordCodecBuilder.mapCodec((instance) -> addModifierFields(instance).and(instance.group(
+public record RemoveFeaturesModifier(HolderSet<Biome> biomes, HolderSet<PlacedFeature> features, GenerationStep.Decoration step) implements Modifier {
+    public static final MapCodec<RemoveFeaturesModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(RemoveFeaturesModifier::biomes),
         PlacedFeature.LIST_CODEC.fieldOf("features").forGetter(RemoveFeaturesModifier::features),
         GenerationStep.Decoration.CODEC.fieldOf("step").forGetter(RemoveFeaturesModifier::step)
-    )).apply(instance, RemoveFeaturesModifier::new));
-    private final HolderSet<Biome> biomes;
-    private final HolderSet<PlacedFeature> features;
-    private final GenerationStep.Decoration step;
-    public RemoveFeaturesModifier(ModifierPredicate predicate, HolderSet<Biome> biomes, HolderSet<PlacedFeature> features, GenerationStep.Decoration step) {
-        super(predicate, ModifierPhase.REMOVE);
-        this.biomes = biomes;
-        this.features = features;
-        this.step = step;
-    }
-
-    public HolderSet<Biome> biomes() {
-        return this.biomes;
-    }
-
-    public HolderSet<PlacedFeature> features() {
-        return this.features;
-    }
-
-    public GenerationStep.Decoration step() {
-        return this.step;
-    }
+    ).apply(instance, RemoveFeaturesModifier::new));
 
     public void applyModifier(Biome biome) {
         int index = this.step().ordinal();
@@ -67,6 +45,11 @@ public class RemoveFeaturesModifier extends Modifier {
         for (Holder<Biome> entry : biomes.stream().toList()) {
             this.applyModifier(entry.value());
         }
+    }
+
+    @Override
+    public ModifierPhase getPhase() {
+        return ModifierPhase.REMOVE;
     }
 
     @Override

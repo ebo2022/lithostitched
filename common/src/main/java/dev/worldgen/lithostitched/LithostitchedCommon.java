@@ -8,13 +8,11 @@ import dev.worldgen.lithostitched.worldgen.feature.WellFeature;
 import dev.worldgen.lithostitched.worldgen.feature.config.DungeonFeatureConfig;
 import dev.worldgen.lithostitched.worldgen.feature.config.WellFeatureConfig;
 import dev.worldgen.lithostitched.worldgen.modifier.*;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.*;
 import dev.worldgen.lithostitched.worldgen.poolalias.ApplyWithChance;
 import dev.worldgen.lithostitched.worldgen.poolelement.GuaranteedPoolElement;
 import dev.worldgen.lithostitched.worldgen.poolelement.LimitedPoolElement;
 import dev.worldgen.lithostitched.worldgen.processor.ApplyRandomStructureProcessor;
 import dev.worldgen.lithostitched.worldgen.processor.BlockSwapStructureProcessor;
-import dev.worldgen.lithostitched.worldgen.processor.ConditionStructureProcessor;
 import dev.worldgen.lithostitched.worldgen.processor.ReferenceStructureProcessor;
 import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure;
 import net.minecraft.core.Registry;
@@ -46,7 +44,7 @@ public final class LithostitchedCommon {
 	public static void init() {}
 
 	public static <T> ResourceKey<T> createResourceKey(ResourceKey<? extends Registry<T>> resourceKey, String name) {
-		return ResourceKey.create(resourceKey, new ResourceLocation(MOD_ID, name));
+		return ResourceKey.create(resourceKey, ResourceLocation.fromNamespaceAndPath(MOD_ID, name));
 	}
 
 	public static void registerCommonModifiers(BiConsumer<String, MapCodec<? extends Modifier>> consumer) {
@@ -57,14 +55,6 @@ public final class LithostitchedCommon {
 		consumer.accept("add_template_pool_elements", AddTemplatePoolElementsModifier.CODEC);
 		consumer.accept("add_pool_aliases", AddPoolAliasesModifier.CODEC);
 		consumer.accept("redirect_feature", RedirectFeatureModifier.CODEC);
-	}
-
-	public static void registerCommonModifierPredicates(BiConsumer<String, MapCodec<? extends ModifierPredicate>> consumer) {
-		consumer.accept("all_of", AllOfModifierPredicate.CODEC);
-		consumer.accept("any_of", AnyOfModifierPredicate.CODEC);
-		consumer.accept("mod_loaded", ModLoadedModifierPredicate.CODEC);
-		consumer.accept("not", NotModifierPredicate.CODEC);
-		consumer.accept("true", TrueModifierPredicate.CODEC);
 	}
 
 	public static void registerCommonFeatureTypes(BiConsumer<String, Feature<?>> consumer) {
@@ -90,7 +80,6 @@ public final class LithostitchedCommon {
 		consumer.accept("reference", ReferenceStructureProcessor.CODEC);
 		consumer.accept("apply_random", ApplyRandomStructureProcessor.CODEC);
 		consumer.accept("block_swap", BlockSwapStructureProcessor.CODEC);
-		consumer.accept("condition", ConditionStructureProcessor.CODEC);
 	}
 
 	public static void registerCommonBlockEntityModifiers(BiConsumer<String, MapCodec<? extends RuleBlockEntityModifier>> consumer) {

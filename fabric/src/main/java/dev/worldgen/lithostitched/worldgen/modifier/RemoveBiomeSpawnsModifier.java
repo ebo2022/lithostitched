@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.mixin.common.BiomeAccessor;
 import dev.worldgen.lithostitched.mixin.common.MobSpawnSettingsAccessor;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
@@ -24,27 +23,12 @@ import java.util.List;
  *
  * @author Apollo
  */
-public class RemoveBiomeSpawnsModifier extends Modifier {
-    public static final MapCodec<RemoveBiomeSpawnsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
+public record RemoveBiomeSpawnsModifier(HolderSet<Biome> biomes, HolderSet<EntityType<?>> mobs) implements Modifier {
+    public static final MapCodec<RemoveBiomeSpawnsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(RemoveBiomeSpawnsModifier::biomes),
         RegistryCodecs.homogeneousList(Registries.ENTITY_TYPE).fieldOf("mobs").forGetter(RemoveBiomeSpawnsModifier::mobs)
-    )).apply(instance, RemoveBiomeSpawnsModifier::new));
-    private final HolderSet<Biome> biomes;
-    private final HolderSet<EntityType<?>> mobs;
-    protected RemoveBiomeSpawnsModifier(ModifierPredicate predicate, HolderSet<Biome> biomes, HolderSet<EntityType<?>> mobs) {
-        super(predicate, ModifierPhase.REMOVE);
-        this.biomes = biomes;
-        this.mobs = mobs;
-    }
-
-    public HolderSet<Biome> biomes() {
-        return this.biomes;
-    }
-
-    public HolderSet<EntityType<?>> mobs() {
-        return this.mobs;
-    }
-    public List<EntityType<?>> entityTypes() {
+    ).apply(instance, RemoveBiomeSpawnsModifier::new));
+    private List<EntityType<?>> entityTypes() {
         List<EntityType<?>> entityTypes = new ArrayList<>();
         for (Holder<EntityType<?>> entry : this.mobs()) {
             entityTypes.add(entry.value());
@@ -70,6 +54,11 @@ public class RemoveBiomeSpawnsModifier extends Modifier {
         for (Holder<Biome> entry : biomes.stream().toList()) {
             this.applyModifier(entry.value());
         }
+    }
+
+    @Override
+    public ModifierPhase getPhase() {
+        return ModifierPhase.REMOVE;
     }
 
     @Override

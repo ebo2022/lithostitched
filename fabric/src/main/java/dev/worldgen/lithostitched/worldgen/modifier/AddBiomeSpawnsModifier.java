@@ -6,7 +6,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.mixin.common.BiomeAccessor;
 import dev.worldgen.lithostitched.mixin.common.MobSpawnSettingsAccessor;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.util.random.WeightedRandomList;
@@ -23,8 +22,8 @@ import java.util.List;
  *
  * @author Apollo
  */
-public class AddBiomeSpawnsModifier extends Modifier {
-    public static final MapCodec<AddBiomeSpawnsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
+public record AddBiomeSpawnsModifier(HolderSet<Biome> biomes, List<MobSpawnSettings.SpawnerData> biomeSpawns) implements Modifier {
+    public static final MapCodec<AddBiomeSpawnsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(AddBiomeSpawnsModifier::biomes),
         Codec.mapEither(
             MobSpawnSettings.SpawnerData.CODEC.listOf().fieldOf("spawners"),
@@ -36,22 +35,7 @@ public class AddBiomeSpawnsModifier extends Modifier {
             ),
             Either::left
         ).forGetter(AddBiomeSpawnsModifier::biomeSpawns)
-    )).apply(instance, AddBiomeSpawnsModifier::new));
-    private final HolderSet<Biome> biomes;
-    private final List<MobSpawnSettings.SpawnerData> biomeSpawns;
-    protected AddBiomeSpawnsModifier(ModifierPredicate predicate, HolderSet<Biome> biomes, List<MobSpawnSettings.SpawnerData> biomeSpawns) {
-        super(predicate, ModifierPhase.ADD);
-        this.biomes = biomes;
-        this.biomeSpawns = biomeSpawns;
-    }
-
-    public HolderSet<Biome> biomes() {
-        return this.biomes;
-    }
-
-    public List<MobSpawnSettings.SpawnerData> biomeSpawns() {
-        return this.biomeSpawns;
-    }
+    ).apply(instance, AddBiomeSpawnsModifier::new));
 
     public void applyModifier(Biome biome) {
         MobSpawnSettings biomeMobSettings = biome.getMobSettings();
@@ -71,6 +55,11 @@ public class AddBiomeSpawnsModifier extends Modifier {
         for (Holder<Biome> entry : biomes.stream().toList()) {
             this.applyModifier(entry.value());
         }
+    }
+
+    @Override
+    public ModifierPhase getPhase() {
+        return ModifierPhase.ADD;
     }
 
     @Override

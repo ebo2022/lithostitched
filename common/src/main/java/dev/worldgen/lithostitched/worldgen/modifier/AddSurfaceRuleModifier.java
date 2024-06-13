@@ -2,7 +2,6 @@ package dev.worldgen.lithostitched.worldgen.modifier;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.dimension.LevelStem;
@@ -17,24 +16,15 @@ import java.util.HashSet;
  *
  * @author Apollo
  */
-public class AddSurfaceRuleModifier extends Modifier {
-    public static final MapCodec<AddSurfaceRuleModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
+public record AddSurfaceRuleModifier(HashSet<ResourceKey<LevelStem>> levels, SurfaceRules.RuleSource surfaceRule) implements Modifier {
+    public static final MapCodec<AddSurfaceRuleModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ResourceKey.codec(Registries.LEVEL_STEM).listOf().xmap(HashSet::new, ArrayList::new).fieldOf("levels").forGetter(AddSurfaceRuleModifier::levels),
         SurfaceRules.RuleSource.CODEC.fieldOf("surface_rule").forGetter(AddSurfaceRuleModifier::surfaceRule)
-    )).apply(instance, AddSurfaceRuleModifier::new));
-    private final HashSet<ResourceKey<LevelStem>> levels;
-    private final SurfaceRules.RuleSource surfaceRule;
-    public AddSurfaceRuleModifier(ModifierPredicate predicate, HashSet<ResourceKey<LevelStem>> levels, SurfaceRules.RuleSource surfaceRule) {
-        super(predicate, ModifierPhase.NONE);
-        this.levels = levels;
-        this.surfaceRule = surfaceRule;
-    }
-    public HashSet<ResourceKey<LevelStem>> levels() {
-        return this.levels;
-    }
+    ).apply(instance, AddSurfaceRuleModifier::new));
 
-    public SurfaceRules.RuleSource surfaceRule() {
-        return this.surfaceRule;
+    @Override
+    public ModifierPhase getPhase() {
+        return ModifierPhase.NONE;
     }
 
     @Override

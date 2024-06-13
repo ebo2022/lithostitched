@@ -1,12 +1,8 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
-import com.mojang.datafixers.Products;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.registry.LithostitchedRegistries;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.TrueModifierPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.MinecraftServer;
@@ -21,50 +17,32 @@ import java.util.stream.Collectors;
  *
  * @author Apollo
  */
-public abstract class Modifier {
+public interface Modifier {
     @SuppressWarnings("unchecked")
-    public static final Codec<Modifier> CODEC = Codec.lazyInitialized(() -> {
+    Codec<Modifier> CODEC = Codec.lazyInitialized(() -> {
         var modifierRegistry = BuiltInRegistries.REGISTRY.get(LithostitchedRegistries.MODIFIER_TYPE.location());
         if (modifierRegistry == null) throw new NullPointerException("Worldgen modifier registry does not exist yet!");
         return ((Registry<MapCodec<? extends Modifier>>) modifierRegistry).byNameCodec();
     }).dispatch(Modifier::codec, Function.identity());
 
-    private final ModifierPredicate predicate;
-    private final ModifierPhase phase;
+    void applyModifier();
 
-    protected Modifier(ModifierPredicate modifierPredicate, ModifierPhase phase) {
-        this.predicate = modifierPredicate;
-        this.phase = phase;
-    }
+    ModifierPhase getPhase();
 
-    public static <P extends Modifier> Products.P1<RecordCodecBuilder.Mu<P>, ModifierPredicate> addModifierFields(RecordCodecBuilder.Instance<P> codec) {
-        return codec.group(ModifierPredicate.CODEC.fieldOf("predicate").orElse(TrueModifierPredicate.INSTANCE).forGetter(Modifier::predicate));
-    }
-
-    public ModifierPredicate predicate() {
-        return this.predicate;
-    }
-    public ModifierPhase phase() {
-        return this.phase;
-    }
-    public abstract void applyModifier();
-
-    public abstract MapCodec<? extends Modifier> codec();
+    MapCodec<? extends Modifier> codec();
 
     // Apply all worldgen modifiers in the worldgen modifier registry
-    public static void applyModifiers(MinecraftServer server) {
+    static void applyModifiers(MinecraftServer server) {
         Registry<Modifier> modifiers = server.registryAccess().registryOrThrow(LithostitchedRegistries.WORLDGEN_MODIFIER);
         for (ModifierPhase phase : ModifierPhase.values()) {
             if (phase == ModifierPhase.NONE) continue;
-            for (Modifier modifier : modifiers.stream().filter(modifier -> modifier.phase() == phase).collect(Collectors.toSet())) {
-                if (modifier.predicate().test()) {
-                    modifier.applyModifier();
-                }
+            for (Modifier modifier : modifiers.stream().filter(modifier -> modifier.getPhase() == phase).collect(Collectors.toSet())) {
+                modifier.applyModifier();
             }
         }
     }
 
-    public enum ModifierPhase implements StringRepresentable {
+    enum ModifierPhase implements StringRepresentable {
         /**
          * Phase for modifiers to never apply.
          * Useful for modifiers that don't use the regular modifier system for applying modifications, like Forge biome modifiers and the AddSurfaceRule modifier.

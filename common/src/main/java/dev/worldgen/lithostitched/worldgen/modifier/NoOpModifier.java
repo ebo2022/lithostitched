@@ -1,8 +1,6 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 
 /**
  * A {@link Modifier} implementation that does nothing.
@@ -10,12 +8,13 @@ import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
  *
  * @author Apollo
  */
-public class NoOpModifier extends Modifier {
+public record NoOpModifier() implements Modifier {
 
-    public static final MapCodec<NoOpModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).apply(instance, NoOpModifier::new));
+    public static final MapCodec<NoOpModifier> CODEC = MapCodec.unit(NoOpModifier::new);
 
-    protected NoOpModifier(ModifierPredicate predicate) {
-        super(predicate, ModifierPhase.NONE);
+    @Override
+    public ModifierPhase getPhase() {
+        return ModifierPhase.NONE;
     }
 
     @Override

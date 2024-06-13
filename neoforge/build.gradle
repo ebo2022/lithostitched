@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
     id 'net.neoforged.gradle.userdev' version '7.0.107'
     id 'java-library'
-    id "me.modmuss50.mod-publish-plugin" version "0.4.5"
+    id "me.modmuss50.mod-publish-plugin" version "0.5.1"
 }
 
 base {
@@ -83,7 +83,7 @@ publishMods {
     changelog = "${update_changelog}"
     type = STABLE
     modLoaders.add("neoforge")
-    displayName = "%s ~ Neoforge 1.20.5".formatted(project.version)
+    displayName = "%s ~ Neoforge 1.20.6".formatted(project.version)
 
     dryRun = false
 
@@ -91,11 +91,13 @@ publishMods {
         accessToken = providers.environmentVariable("TOKEN_MR")
         projectId = "XaDC71GB"
         minecraftVersions.add("1.20.5")
+        minecraftVersions.add("1.20.6")
     }
 
     curseforge {
         accessToken = providers.environmentVariable("TOKEN_CF")
         projectId = "936015"
         minecraftVersions.add("1.20.5")
+        minecraftVersions.add("1.20.6")
     }
 }

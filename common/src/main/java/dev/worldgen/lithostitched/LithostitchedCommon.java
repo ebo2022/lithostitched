@@ -9,6 +9,7 @@ import dev.worldgen.lithostitched.worldgen.feature.config.DungeonFeatureConfig;
 import dev.worldgen.lithostitched.worldgen.feature.config.WellFeatureConfig;
 import dev.worldgen.lithostitched.worldgen.modifier.*;
 import dev.worldgen.lithostitched.worldgen.poolalias.ApplyWithChance;
+import dev.worldgen.lithostitched.worldgen.poolalias.RandomEntries;
 import dev.worldgen.lithostitched.worldgen.poolelement.GuaranteedPoolElement;
 import dev.worldgen.lithostitched.worldgen.poolelement.LimitedPoolElement;
 import dev.worldgen.lithostitched.worldgen.processor.ApplyRandomStructureProcessor;
@@ -69,6 +70,7 @@ public final class LithostitchedCommon {
 
 	public static void registerCommonPoolAliasBindings(BiConsumer<String, MapCodec<? extends PoolAliasBinding>> consumer) {
 		consumer.accept("apply_with_chance", ApplyWithChance.CODEC);
+		consumer.accept("internal/random_entries", RandomEntries.CODEC);
 	}
 
 

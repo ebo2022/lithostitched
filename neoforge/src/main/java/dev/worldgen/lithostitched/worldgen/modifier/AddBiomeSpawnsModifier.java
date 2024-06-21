@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
@@ -18,7 +17,7 @@ import java.util.List;
  * @author Apollo
  */
 public class AddBiomeSpawnsModifier extends AbstractBiomeModifier {
-    public static final MapCodec<AddBiomeSpawnsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<AddBiomeSpawnsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(AddBiomeSpawnsModifier::biomes),
         Codec.mapEither(
             SpawnerData.CODEC.listOf().fieldOf("spawners"),
@@ -30,11 +29,11 @@ public class AddBiomeSpawnsModifier extends AbstractBiomeModifier {
             ),
             Either::left
         ).forGetter(AddBiomeSpawnsModifier::biomeSpawns)
-    )).apply(instance, AddBiomeSpawnsModifier::new));
+    ).apply(instance, AddBiomeSpawnsModifier::new));
     private final HolderSet<Biome> biomes;
     private final List<SpawnerData> biomeSpawns;
-    protected AddBiomeSpawnsModifier(ModifierPredicate predicate, HolderSet<Biome> biomes, List<SpawnerData> biomeSpawns) {
-        super(predicate, new BiomeModifiers.AddSpawnsBiomeModifier(biomes, biomeSpawns));
+    protected AddBiomeSpawnsModifier(HolderSet<Biome> biomes, List<SpawnerData> biomeSpawns) {
+        super(new BiomeModifiers.AddSpawnsBiomeModifier(biomes, biomeSpawns));
         this.biomes = biomes;
         this.biomeSpawns = biomeSpawns;
     }

@@ -2,7 +2,6 @@ package dev.worldgen.lithostitched.worldgen.modifier;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -17,18 +16,18 @@ import java.util.Collections;
  * @author Apollo
  */
 public class RemoveFeaturesModifier extends AbstractBiomeModifier {
-    public static final MapCodec<RemoveFeaturesModifier> CODEC = RecordCodecBuilder.mapCodec((instance) -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<RemoveFeaturesModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(RemoveFeaturesModifier::biomes),
         PlacedFeature.LIST_CODEC.fieldOf("features").forGetter(RemoveFeaturesModifier::features),
         GenerationStep.Decoration.CODEC.fieldOf("step").forGetter(RemoveFeaturesModifier::step)
-    )).apply(instance, RemoveFeaturesModifier::new));
+    ).apply(instance, RemoveFeaturesModifier::new));
     private final HolderSet<Biome> biomes;
     private final HolderSet<PlacedFeature> features;
 
     private final GenerationStep.Decoration step;
 
-    public RemoveFeaturesModifier(ModifierPredicate predicate, HolderSet<Biome> biomes, HolderSet<PlacedFeature> features, GenerationStep.Decoration step) {
-        super(predicate, new BiomeModifiers.RemoveFeaturesBiomeModifier(biomes, features, Collections.singleton(step)));
+    public RemoveFeaturesModifier(HolderSet<Biome> biomes, HolderSet<PlacedFeature> features, GenerationStep.Decoration step) {
+        super(new BiomeModifiers.RemoveFeaturesBiomeModifier(biomes, features, Collections.singleton(step)));
         this.biomes = biomes;
         this.features = features;
         this.step = step;

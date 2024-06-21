@@ -1,6 +1,5 @@
 package dev.worldgen.lithostitched.worldgen.modifier;
 
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 
 /**
@@ -8,10 +7,9 @@ import net.neoforged.neoforge.common.world.BiomeModifier;
  *
  * @author Apollo
  */
-public abstract class AbstractBiomeModifier extends Modifier {
+public abstract class AbstractBiomeModifier implements Modifier {
     private final BiomeModifier neoforgeBiomeModifier;
-    protected AbstractBiomeModifier(ModifierPredicate predicate, BiomeModifier neoforgeBiomeModifier) {
-        super(predicate, ModifierPhase.NONE);
+    protected AbstractBiomeModifier(BiomeModifier neoforgeBiomeModifier) {
         this.neoforgeBiomeModifier = neoforgeBiomeModifier;
     }
 
@@ -20,6 +18,11 @@ public abstract class AbstractBiomeModifier extends Modifier {
      */
     public BiomeModifier neoforgeBiomeModifier() {
         return this.neoforgeBiomeModifier;
+    }
+
+    @Override
+    public ModifierPhase getPhase() {
+        return ModifierPhase.NONE;
     }
 
     @Override

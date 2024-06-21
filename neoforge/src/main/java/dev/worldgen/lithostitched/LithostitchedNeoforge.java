@@ -9,10 +9,8 @@ import net.neoforged.fml.common.Mod;
  */
 @Mod(LithostitchedCommon.MOD_ID)
 public final class LithostitchedNeoforge {
-
 	public LithostitchedNeoforge(IEventBus bus) {
 		LithostitchedCommon.init();
 		LithostitchedBuiltInRegistries.init(bus);
 	}
-
 }

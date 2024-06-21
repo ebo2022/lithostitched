@@ -3,7 +3,6 @@ package dev.worldgen.lithostitched.registry;
 import com.mojang.serialization.MapCodec;
 import dev.worldgen.lithostitched.LithostitchedCommon;
 import dev.worldgen.lithostitched.worldgen.modifier.*;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import dev.worldgen.lithostitched.worldgen.surface.LithostitchedSurfaceRules;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -29,9 +28,6 @@ public final class LithostitchedBuiltInRegistries {
 	private static final DeferredRegister<MapCodec<? extends Modifier>> DEFERRED_MODIFIER_TYPES = DeferredRegister.create(LithostitchedRegistries.MODIFIER_TYPE, LithostitchedCommon.MOD_ID);
 	public static final Registry<MapCodec<? extends Modifier>> MODIFIER_TYPE = DEFERRED_MODIFIER_TYPES.makeRegistry(builder -> builder.sync(false));
 
-	private static final DeferredRegister<MapCodec<? extends ModifierPredicate>> DEFERRED_MODIFIER_PREDICATES_TYPES = DeferredRegister.create(LithostitchedRegistries.MODIFIER_PREDICATE_TYPE, LithostitchedCommon.MOD_ID);
-	public static final Registry<MapCodec<? extends ModifierPredicate>> MODIFIER_PREDICATE_TYPE = DEFERRED_MODIFIER_PREDICATES_TYPES.makeRegistry(builder -> builder.sync(false));
-
 	private static final DeferredRegister<MapCodec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, "lithostitched");
 	public static void init(IEventBus bus) {
 
@@ -56,10 +52,6 @@ public final class LithostitchedBuiltInRegistries {
 		LithostitchedCommon.registerCommonModifiers((name, codec) -> DEFERRED_MODIFIER_TYPES.register(name, () -> codec));
 		registerForgeModifiers((name, codec) -> DEFERRED_MODIFIER_TYPES.register(name, () -> codec));
 		DEFERRED_MODIFIER_TYPES.register(bus);
-
-		LithostitchedCommon.registerCommonModifierPredicates((name, codec) -> DEFERRED_MODIFIER_PREDICATES_TYPES.register(name, () -> codec));
-		DEFERRED_MODIFIER_PREDICATES_TYPES.register(bus);
-
 	}
 
 	public static void registerForgeModifiers(BiConsumer<String, MapCodec<? extends Modifier>> consumer) {

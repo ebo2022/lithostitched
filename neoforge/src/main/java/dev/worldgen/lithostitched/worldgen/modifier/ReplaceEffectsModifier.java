@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.worldgen.lithostitched.registry.LithostitchedNeoforgeBiomeModifiers;
 import dev.worldgen.lithostitched.worldgen.biome.BiomeEffects;
-import dev.worldgen.lithostitched.worldgen.modifier.predicate.ModifierPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.biome.Biome;
 
@@ -14,14 +13,14 @@ import net.minecraft.world.level.biome.Biome;
  * @author Apollo
  */
 public class ReplaceEffectsModifier extends AbstractBiomeModifier {
-    public static final MapCodec<ReplaceEffectsModifier> CODEC = RecordCodecBuilder.mapCodec((instance) -> addModifierFields(instance).and(instance.group(
+    public static final MapCodec<ReplaceEffectsModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Biome.LIST_CODEC.fieldOf("biomes").forGetter(ReplaceEffectsModifier::biomes),
         BiomeEffects.CODEC.fieldOf("effects").forGetter(ReplaceEffectsModifier::effects)
-    )).apply(instance, ReplaceEffectsModifier::new));
+    ).apply(instance, ReplaceEffectsModifier::new));
     private final HolderSet<Biome> biomes;
     private final BiomeEffects effects;
-    public ReplaceEffectsModifier(ModifierPredicate predicate, HolderSet<Biome> biomes, BiomeEffects effects) {
-        super(predicate, new LithostitchedNeoforgeBiomeModifiers.ReplaceEffectsBiomeModifier(biomes, effects));
+    public ReplaceEffectsModifier(HolderSet<Biome> biomes, BiomeEffects effects) {
+        super(new LithostitchedNeoforgeBiomeModifiers.ReplaceEffectsBiomeModifier(biomes, effects));
         this.biomes = biomes;
         this.effects = effects;
     }

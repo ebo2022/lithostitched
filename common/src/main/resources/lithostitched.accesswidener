@@ -4,3 +4,5 @@ mutable field net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator settin
 accessible field net/minecraft/world/level/levelgen/NoiseBasedChunkGenerator settings Lnet/minecraft/core/Holder;
 
 accessible class net/minecraft/world/level/biome/Biome$ClimateSettings
+
+accessible class net/minecraft/world/level/levelgen/DensityFunctions$PureTransformer

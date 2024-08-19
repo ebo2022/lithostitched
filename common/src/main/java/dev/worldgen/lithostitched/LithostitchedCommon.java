@@ -73,7 +73,6 @@ public final class LithostitchedCommon {
 		consumer.accept("internal/random_entries", RandomEntries.CODEC);
 	}
 
-
 	public static void registerCommonStructureTypes(BiConsumer<String, MapCodec<? extends Structure>> consumer) {
 		consumer.accept("jigsaw", AlternateJigsawStructure.CODEC);
 	}

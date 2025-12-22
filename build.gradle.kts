@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.0"
-    id("earth.terrarium.cloche") version "0.13.4-patched3"
+    id("earth.terrarium.cloche") version "0.16.26"
 }
 
 repositories {

@@ -8,6 +8,9 @@ accessible class net/minecraft/world/level/biome/Biome$ClimateSettings
 
 # Density functions
 accessible class net/minecraft/world/level/levelgen/DensityFunctions$EndIslandDensityFunction
+accessible method net/minecraft/world/level/levelgen/DensityFunctions singleArgumentCodec (Lcom/mojang/serialization/Codec;Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/util/KeyDispatchDataCodec;
+accessible method net/minecraft/world/level/levelgen/DensityFunctions singleFunctionArgumentCodec (Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/util/KeyDispatchDataCodec;
+accessible method net/minecraft/world/level/levelgen/DensityFunctions doubleFunctionArgumentCodec (Ljava/util/function/BiFunction;Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/util/KeyDispatchDataCodec;
 
 # Structures
 accessible class net/minecraft/world/level/levelgen/structure/structures/WoodlandMansionPieces$MansionGrid

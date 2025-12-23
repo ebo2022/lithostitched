@@ -38,6 +38,9 @@ import dev.worldgen.lithostitched.worldgen.surface.condition.internal.TagFilledC
 import dev.worldgen.lithostitched.worldgen.surface.rule.BandlandsRule;
 import dev.worldgen.lithostitched.worldgen.surface.rule.ReferenceRule;
 import dev.worldgen.lithostitched.worldgen.surface.rule.TransientMergedRule;
+import dev.worldgen.lithostitched.worldgen.vectorfunction.ConstantVectorFunction;
+import dev.worldgen.lithostitched.worldgen.vectorfunction.ScaleVectorFunction;
+import dev.worldgen.lithostitched.worldgen.vectorfunction.VectorFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -230,6 +233,11 @@ public final class Lithostitched {
 		consumer.accept("base", BaseBand.CODEC);
 		consumer.accept("repeating", RepeatingBand.CODEC);
 		consumer.accept("wrapped", WrappedBand.CODEC);
+	}
+
+	public static void registerCommonVectorFunctionTypes(BiConsumer<String, MapCodec<? extends VectorFunction>> consumer) {
+		consumer.accept("constant", ConstantVectorFunction.CODEC);
+		consumer.accept("scale", ScaleVectorFunction.CODEC);
 	}
 
 

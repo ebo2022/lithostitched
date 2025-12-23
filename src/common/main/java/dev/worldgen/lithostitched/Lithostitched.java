@@ -30,7 +30,6 @@ import dev.worldgen.lithostitched.worldgen.processor.*;
 import dev.worldgen.lithostitched.worldgen.processor.condition.*;
 import dev.worldgen.lithostitched.worldgen.stateprovider.RandomBlockProvider;
 import dev.worldgen.lithostitched.worldgen.stateprovider.WeightedProvider;
-import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawConfig;
 import dev.worldgen.lithostitched.worldgen.structure.AlternateJigsawStructure;
 import dev.worldgen.lithostitched.worldgen.structure.DelegatingStructure;
 import dev.worldgen.lithostitched.worldgen.surface.condition.*;
@@ -38,10 +37,7 @@ import dev.worldgen.lithostitched.worldgen.surface.condition.internal.TagFilledC
 import dev.worldgen.lithostitched.worldgen.surface.rule.BandlandsRule;
 import dev.worldgen.lithostitched.worldgen.surface.rule.ReferenceRule;
 import dev.worldgen.lithostitched.worldgen.surface.rule.TransientMergedRule;
-import dev.worldgen.lithostitched.worldgen.vectorfunction.AddVectorFunction;
-import dev.worldgen.lithostitched.worldgen.vectorfunction.ConstantVectorFunction;
-import dev.worldgen.lithostitched.worldgen.vectorfunction.ScaleVectorFunction;
-import dev.worldgen.lithostitched.worldgen.vectorfunction.VectorFunction;
+import dev.worldgen.lithostitched.worldgen.vectorfunction.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -60,7 +56,6 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasBinding;
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifierType;
 import net.minecraft.world.level.material.Fluid;
@@ -237,9 +232,12 @@ public final class Lithostitched {
 	}
 
 	public static void registerCommonVectorFunctionTypes(BiConsumer<String, MapCodec<? extends VectorFunction>> consumer) {
-		consumer.accept("constant", ConstantVectorFunction.CODEC);
-		consumer.accept("scale", ScaleVectorFunction.CODEC);
 		consumer.accept("add", AddVectorFunction.CODEC);
+		consumer.accept("components", ComponentsVectorFunction.CODEC);
+		consumer.accept("cross", CrossVectorFunction.CODEC);
+		consumer.accept("constant", ConstantVectorFunction.CODEC);
+		consumer.accept("normalize", NormalizeVectorFunction.CODEC);
+		consumer.accept("scale", ScaleVectorFunction.CODEC);
 	}
 
 

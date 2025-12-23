@@ -18,7 +18,7 @@ public record NormalizeVectorFunction(VectorFunction input) implements VectorFun
     }
 
     @Override
-    public MapCodec<? extends VectorFunction> codec() {
+    public MapCodec<NormalizeVectorFunction> codec() {
         return CODEC;
     }
 }

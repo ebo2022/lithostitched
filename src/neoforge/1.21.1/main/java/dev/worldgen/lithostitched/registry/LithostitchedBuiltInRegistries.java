@@ -9,6 +9,7 @@ import dev.worldgen.lithostitched.worldgen.modifier.*;
 import dev.worldgen.lithostitched.worldgen.modifier.template.TemplateList;
 import dev.worldgen.lithostitched.worldgen.placementcondition.PlacementCondition;
 import dev.worldgen.lithostitched.worldgen.processor.condition.ProcessorCondition;
+import dev.worldgen.lithostitched.worldgen.vectorfunction.VectorFunction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -42,6 +43,9 @@ public final class LithostitchedBuiltInRegistries {
 	private static final DeferredRegister<MapCodec<? extends Band>> DEFERRED_BANDLANDS_BAND_TYPES = DeferredRegister.create(LithostitchedRegistryKeys.BANDLANDS_BAND_TYPE, MOD_ID);
 	public static final Registry<MapCodec<? extends Band>> BANDLANDS_BAND_TYPE = DEFERRED_BANDLANDS_BAND_TYPES.makeRegistry(builder -> builder.sync(false));
 
+	private static final DeferredRegister<MapCodec<? extends VectorFunction>> DEFFERED_VECTOR_FUNCTION_TYPES = DeferredRegister.create(LithostitchedRegistryKeys.VECTOR_FUNCTION_TYPE, MOD_ID);
+	public static final Registry<MapCodec<? extends VectorFunction>> VECTOR_FUNCTION_TYPE = DEFFERED_VECTOR_FUNCTION_TYPES.makeRegistry(builder -> builder.sync(false));
+
 	private static final DeferredRegister<MapCodec<? extends BiomeModifier>> BIOME_MODIFIER_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, MOD_ID);
 	private static final DeferredRegister<MapCodec<? extends ICondition>> RESOURCE_CONDITION_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.CONDITION_CODECS, MOD_ID);
 
@@ -65,6 +69,7 @@ public final class LithostitchedBuiltInRegistries {
 			event.dataPackRegistry(LithostitchedRegistryKeys.SURFACE_RULE, SurfaceRules.RuleSource.CODEC);
 			event.dataPackRegistry(LithostitchedRegistryKeys.BANDLANDS, Bandlands.CODEC);
 			event.dataPackRegistry(LithostitchedRegistryKeys.TEMPLATE_LIST, TemplateList.CODEC);
+			event.dataPackRegistry(LithostitchedRegistryKeys.VECTOR_FUNCTION, VectorFunction.DIRECT_CODEC);
 		});
 
 		Lithostitched.registerCommonModifiers((name, codec) -> DEFERRED_MODIFIER_TYPES.register(name, () -> codec));
@@ -79,6 +84,9 @@ public final class LithostitchedBuiltInRegistries {
 
 		Lithostitched.registerCommonBandlandsBandTypes((name, codec) -> DEFERRED_BANDLANDS_BAND_TYPES.register(name, () -> codec));
 		DEFERRED_BANDLANDS_BAND_TYPES.register(bus);
+
+		Lithostitched.registerCommonVectorFunctionTypes((name, codec) -> DEFFERED_VECTOR_FUNCTION_TYPES.register(name, () -> codec));
+		DEFFERED_VECTOR_FUNCTION_TYPES.register(bus);
 
 		registerForgeBiomeModifiers((name, codec) -> BIOME_MODIFIER_TYPES.register(name, () -> codec));
 		BIOME_MODIFIER_TYPES.register(bus);

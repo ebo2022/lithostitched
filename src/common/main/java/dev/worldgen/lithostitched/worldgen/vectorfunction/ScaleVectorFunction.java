@@ -38,7 +38,7 @@ public record ScaleVectorFunction(VectorFunction argument1, DensityFunction argu
 
     @Override
     public VectorFunction mapAll(Visitor visitor) {
-        return new ScaleVectorFunction(visitor.apply(this.argument1), visitor.visitDensity(this.argument2));
+        return visitor.apply(new ScaleVectorFunction(visitor.apply(this.argument1), visitor.visitDensity(this.argument2)));
     }
 
     @Override

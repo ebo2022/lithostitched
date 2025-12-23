@@ -14,7 +14,7 @@ public record NormalizeVectorFunction(VectorFunction input) implements VectorFun
 
     @Override
     public VectorFunction mapAll(Visitor visitor) {
-        return new NormalizeVectorFunction(visitor.apply(this.input));
+        return visitor.apply(new NormalizeVectorFunction(visitor.apply(this.input)));
     }
 
     @Override

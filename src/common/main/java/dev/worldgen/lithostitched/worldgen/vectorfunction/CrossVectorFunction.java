@@ -14,7 +14,7 @@ public record CrossVectorFunction(VectorFunction argument1, VectorFunction argum
 
     @Override
     public VectorFunction mapAll(Visitor visitor) {
-        return new CrossVectorFunction(visitor.apply(this.argument1), visitor.apply(this.argument2));
+        return visitor.apply(new CrossVectorFunction(visitor.apply(this.argument1), visitor.apply(this.argument2)));
     }
 
     @Override

@@ -14,7 +14,7 @@ public record AddVectorFunction(VectorFunction argument1, VectorFunction argumen
 
     @Override
     public VectorFunction mapAll(Visitor visitor) {
-        return new AddVectorFunction(visitor.apply(this.argument1), visitor.apply(this.argument2));
+        return visitor.apply(new AddVectorFunction(visitor.apply(this.argument1), visitor.apply(this.argument2)));
     }
 
     @Override

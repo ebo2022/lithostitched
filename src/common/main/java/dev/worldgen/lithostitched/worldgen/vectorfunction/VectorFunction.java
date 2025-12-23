@@ -46,7 +46,7 @@ public interface VectorFunction {
 
     interface ContextProvider extends DensityFunction.ContextProvider {
 
-        void fillAllDirectly(Vec3[] vec3s, VectorFunction function);
+        void fillAllDirectly(Vec3[] array, VectorFunction function);
     }
 
     interface Visitor {

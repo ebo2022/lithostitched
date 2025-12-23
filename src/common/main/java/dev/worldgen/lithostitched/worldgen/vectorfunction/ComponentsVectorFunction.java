@@ -33,7 +33,7 @@ public record ComponentsVectorFunction(DensityFunction x, DensityFunction y, Den
 
     @Override
     public VectorFunction mapAll(Visitor visitor) {
-        return new ComponentsVectorFunction(visitor.visitDensity(this.x), visitor.visitDensity(this.y), visitor.visitDensity(this.z));
+        return visitor.apply(new ComponentsVectorFunction(visitor.visitDensity(this.x), visitor.visitDensity(this.y), visitor.visitDensity(this.z)));
     }
 
     @Override

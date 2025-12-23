@@ -37,6 +37,8 @@
     "common.JigsawStructureAccessor",
     "common.MappedRegistryAccessor",
     "common.NoiseGeneratorSettingsAccessor",
+    "common.NormalNoiseMixin",
+    "common.PerlinNoiseMixin",
     "common.PlacedFeatureAccessor",
     "common.PoolAliasLookupMixin",
     "common.RandomStateAccessor",

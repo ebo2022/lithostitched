@@ -93,6 +93,31 @@ public interface VectorFunction {
         }
     }
 
+    interface PureBiTransformer extends VectorFunction {
+        VectorFunction argument1();
+
+        VectorFunction argument2();
+
+        Vec3 transform(Vec3 argument1, Vec3 argument2);
+
+        @Override
+        default Vec3 compute(FunctionContext context) {
+            return this.transform(this.argument1().compute(context), this.argument2().compute(context));
+        }
+
+        @Override
+        default void fillArray(Vec3[] array, ContextProvider provider) {
+            this.argument1().fillArray(array, provider);
+
+            Vec3[] array2 = new Vec3[array.length];
+            this.argument2().fillArray(array2, provider);
+
+            for (int i = 0; i < array.length; ++i) {
+                array[i] = this.transform(array[i], array2[i]);
+            }
+        }
+    }
+
     interface TransformerWithContext extends VectorFunction {
         VectorFunction input();
 

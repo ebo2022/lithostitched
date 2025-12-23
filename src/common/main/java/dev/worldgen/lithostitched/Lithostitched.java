@@ -38,6 +38,7 @@ import dev.worldgen.lithostitched.worldgen.surface.condition.internal.TagFilledC
 import dev.worldgen.lithostitched.worldgen.surface.rule.BandlandsRule;
 import dev.worldgen.lithostitched.worldgen.surface.rule.ReferenceRule;
 import dev.worldgen.lithostitched.worldgen.surface.rule.TransientMergedRule;
+import dev.worldgen.lithostitched.worldgen.vectorfunction.AddVectorFunction;
 import dev.worldgen.lithostitched.worldgen.vectorfunction.ConstantVectorFunction;
 import dev.worldgen.lithostitched.worldgen.vectorfunction.ScaleVectorFunction;
 import dev.worldgen.lithostitched.worldgen.vectorfunction.VectorFunction;
@@ -238,6 +239,7 @@ public final class Lithostitched {
 	public static void registerCommonVectorFunctionTypes(BiConsumer<String, MapCodec<? extends VectorFunction>> consumer) {
 		consumer.accept("constant", ConstantVectorFunction.CODEC);
 		consumer.accept("scale", ScaleVectorFunction.CODEC);
+		consumer.accept("add", AddVectorFunction.CODEC);
 	}
 
 

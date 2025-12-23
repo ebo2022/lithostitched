@@ -2,7 +2,6 @@ package dev.worldgen.lithostitched.worldgen.vectorfunction;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
-import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.phys.Vec3;
 
 record VectorFunctionHolderHolder(Holder<VectorFunction> function) implements VectorFunction {
@@ -12,8 +11,8 @@ record VectorFunctionHolderHolder(Holder<VectorFunction> function) implements Ve
     }
 
     @Override
-    public void fillArray(Vec3[] vec3s, ContextProvider provider) {
-        this.function.value().fillArray(vec3s, provider);
+    public void fillArray(Vec3[] array, ContextProvider provider) {
+        this.function.value().fillArray(array, provider);
     }
 
     @Override

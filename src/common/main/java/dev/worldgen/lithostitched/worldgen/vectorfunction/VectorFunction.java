@@ -34,7 +34,7 @@ public interface VectorFunction {
 
     Vec3 compute(FunctionContext context);
 
-    void fillArray(Vec3[] vec3s, ContextProvider provider);
+    void fillArray(Vec3[] array, ContextProvider provider);
 
     VectorFunction mapAll(Visitor visitor);
 
@@ -44,14 +44,17 @@ public interface VectorFunction {
 
     record SinglePointContext(int blockX, int blockY, int blockZ) implements FunctionContext {}
 
-    interface ContextProvider {
-        DensityFunction.FunctionContext forIndex(int i);
+    interface ContextProvider extends DensityFunction.ContextProvider {
 
         void fillAllDirectly(Vec3[] vec3s, VectorFunction function);
     }
 
     interface Visitor {
         VectorFunction apply(VectorFunction function);
+
+        default DensityFunction visitDensity(DensityFunction function) {
+            return function;
+        }
 
         default DensityFunction.NoiseHolder visitNoise(DensityFunction.NoiseHolder holder) {
             return holder;
@@ -60,8 +63,8 @@ public interface VectorFunction {
 
     interface SimpleFunction extends VectorFunction {
         @Override
-        default void fillArray(Vec3[] vec3s, ContextProvider provider) {
-            provider.fillAllDirectly(vec3s, this);
+        default void fillArray(Vec3[] array, ContextProvider provider) {
+            provider.fillAllDirectly(array, this);
         }
 
         @Override
@@ -79,18 +82,14 @@ public interface VectorFunction {
         default Vec3 compute(FunctionContext context) {
             return this.transform(this.input().compute(context));
         }
-    }
-
-    interface PureBiTransformer extends VectorFunction {
-        VectorFunction argument1();
-
-        VectorFunction argument2();
-
-        Vec3 transform(Vec3 argument1, Vec3 argument2);
 
         @Override
-        default Vec3 compute(FunctionContext context) {
-            return this.transform(this.argument1().compute(context), this.argument2().compute(context));
+        default void fillArray(Vec3[] array, ContextProvider provider) {
+            this.input().fillArray(array, provider);
+
+            for(int $$2 = 0; $$2 < array.length; ++$$2) {
+                array[$$2] = this.transform(array[$$2]);
+            }
         }
     }
 

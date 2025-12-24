@@ -18,7 +18,7 @@ public record ShiftedNoiseGradientVectorFunction(DensityFunction shiftX, Density
     ).apply(instance, ShiftedNoiseGradientVectorFunction::new));
 
     @Override
-    public Vec3 compute(FunctionContext context) {
+    public Vec3 compute(DensityFunction.FunctionContext context) {
         double x = context.blockX() * this.xzScale + this.shiftX.compute(context);
         double y = context.blockY() * this.yScale + this.shiftY.compute(context);
         double z = context.blockZ() * this.xzScale + this.shiftZ.compute(context);
@@ -28,13 +28,43 @@ public record ShiftedNoiseGradientVectorFunction(DensityFunction shiftX, Density
     }
 
     @Override
-    public void fillArray(Vec3[] array, ContextProvider provider) {
-        provider.fillAllDirectly(array, this);
+    public void fillArray(Vec3[] output, ContextProvider provider) {
+        provider.fillAllDirectly(output, this);
     }
 
     @Override
     public VectorFunction mapAll(Visitor visitor) {
-        return visitor.apply(new ShiftedNoiseGradientVectorFunction(visitor.visitDensity(this.shiftX), visitor.visitDensity(this.shiftY), visitor.visitDensity(this.shiftZ), this.xzScale, this.yScale, visitor.visitNoise(this.noise)));
+        return visitor.visit(new ShiftedNoiseGradientVectorFunction(visitor.visitDensity(this.shiftX), visitor.visitDensity(this.shiftY), visitor.visitDensity(this.shiftZ), this.xzScale, this.yScale, visitor.visitNoise(this.noise)));
+    }
+
+    @Override
+    public double minX() {
+        return -Double.MAX_VALUE;
+    }
+
+    @Override
+    public double maxX() {
+        return Double.MAX_VALUE;
+    }
+
+    @Override
+    public double minY() {
+        return -Double.MAX_VALUE;
+    }
+
+    @Override
+    public double maxY() {
+        return Double.MAX_VALUE;
+    }
+
+    @Override
+    public double minZ() {
+        return -Double.MAX_VALUE;
+    }
+
+    @Override
+    public double maxZ() {
+        return Double.MAX_VALUE;
     }
 
     @Override

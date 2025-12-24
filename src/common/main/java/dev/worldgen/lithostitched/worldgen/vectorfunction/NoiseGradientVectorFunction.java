@@ -15,20 +15,50 @@ public record NoiseGradientVectorFunction(DensityFunction.NoiseHolder noise, dou
     ).apply(instance, NoiseGradientVectorFunction::new));
 
     @Override
-    public Vec3 compute(FunctionContext context) {
+    public Vec3 compute(DensityFunction.FunctionContext context) {
         double[] grad = new double[3];
         ((NoiseDuck) (Object) this.noise).lithostitched$withGradient(this.xzScale * context.blockX(), this.yScale * context.blockY(), this.xzScale * context.blockZ(), grad);
         return new Vec3(grad[0], grad[1], grad[2]);
     }
 
     @Override
-    public void fillArray(Vec3[] array, ContextProvider provider) {
-        provider.fillAllDirectly(array, this);
+    public void fillArray(Vec3[] output, ContextProvider provider) {
+        provider.fillAllDirectly(output, this);
     }
 
     @Override
     public VectorFunction mapAll(Visitor visitor) {
-        return visitor.apply(new NoiseGradientVectorFunction(visitor.visitNoise(this.noise), this.xzScale, this.yScale));
+        return visitor.visit(new NoiseGradientVectorFunction(visitor.visitNoise(this.noise), this.xzScale, this.yScale));
+    }
+
+    @Override
+    public double minX() {
+        return -Double.MAX_VALUE;
+    }
+
+    @Override
+    public double maxX() {
+        return Double.MAX_VALUE;
+    }
+
+    @Override
+    public double minY() {
+        return -Double.MAX_VALUE;
+    }
+
+    @Override
+    public double maxY() {
+        return Double.MAX_VALUE;
+    }
+
+    @Override
+    public double minZ() {
+        return -Double.MAX_VALUE;
+    }
+
+    @Override
+    public double maxZ() {
+        return Double.MAX_VALUE;
     }
 
     @Override

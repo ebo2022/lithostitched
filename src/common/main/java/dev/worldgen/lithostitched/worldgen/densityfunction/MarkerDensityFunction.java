@@ -2,7 +2,7 @@ package dev.worldgen.lithostitched.worldgen.densityfunction;
 
 import net.minecraft.world.level.levelgen.DensityFunction;
 
-public interface MarkerFunction extends DensityFunction.SimpleFunction {
+public interface MarkerDensityFunction extends DensityFunction.SimpleFunction {
     @Override
     default double compute(FunctionContext context) {
         throw new IllegalStateException("Marker density function should never be computed!");

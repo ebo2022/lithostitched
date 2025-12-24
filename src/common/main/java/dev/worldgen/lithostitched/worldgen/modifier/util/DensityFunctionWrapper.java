@@ -1,6 +1,6 @@
 package dev.worldgen.lithostitched.worldgen.modifier.util;
 
-import dev.worldgen.lithostitched.worldgen.densityfunction.MarkerFunction;
+import dev.worldgen.lithostitched.worldgen.densityfunction.MarkerDensityFunction;
 import dev.worldgen.lithostitched.worldgen.densityfunction.MergedDensityFunction;
 import dev.worldgen.lithostitched.worldgen.densityfunction.OriginalMarkerDensityFunction;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -32,6 +32,6 @@ public class DensityFunctionWrapper {
     }
 
     private static boolean isMarker(DensityFunction df) {
-        return df instanceof DensityFunctions.HolderHolder hh && hh.function().value() instanceof MarkerFunction;
+        return df instanceof DensityFunctions.HolderHolder hh && hh.function().value() instanceof MarkerDensityFunction;
     }
 }

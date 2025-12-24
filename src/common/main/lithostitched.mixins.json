@@ -31,11 +31,13 @@
 
     "common.ChunkGeneratorAccessor",
     "common.ChunkMapMixin",
+    "common.DensityFunctionVisitorMixin",
     "common.DripstoneUtilsAccessor",
     "common.GameTestServerMixin",
     "common.HolderReferenceAccessor",
     "common.JigsawStructureAccessor",
     "common.MappedRegistryAccessor",
+    "common.NoiseChunkMixin",
     "common.NoiseGeneratorSettingsAccessor",
     "common.NoiseHolderMixin",
     "common.NormalNoiseMixin",

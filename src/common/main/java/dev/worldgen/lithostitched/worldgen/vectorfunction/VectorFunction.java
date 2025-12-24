@@ -12,6 +12,8 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Function;
 
+import static net.minecraft.world.level.levelgen.DensityFunction.*;
+
 /**
  * A {@link Vec3}-returning analogue to vanilla density functions.
  * <p>Custom types should be registered to {@link LithostitchedRegistryKeys#VECTOR_FUNCTION_TYPE}.
@@ -34,15 +36,23 @@ public interface VectorFunction {
 
     Vec3 compute(FunctionContext context);
 
-    void fillArray(Vec3[] array, ContextProvider provider);
+    void fillArray(Vec3[] output, ContextProvider provider);
 
     VectorFunction mapAll(Visitor visitor);
 
+    double minX();
+
+    double maxX();
+
+    double minY();
+
+    double maxY();
+
+    double minZ();
+
+    double maxZ();
+
     MapCodec<? extends VectorFunction> codec();
-
-    interface FunctionContext extends DensityFunction.FunctionContext {}
-
-    record SinglePointContext(int blockX, int blockY, int blockZ) implements FunctionContext {}
 
     interface ContextProvider extends DensityFunction.ContextProvider {
 
@@ -50,7 +60,9 @@ public interface VectorFunction {
     }
 
     interface Visitor {
-        VectorFunction apply(VectorFunction function);
+        default VectorFunction visit(VectorFunction function) {
+            return function;
+        }
 
         default DensityFunction visitDensity(DensityFunction function) {
             return function;
@@ -63,13 +75,13 @@ public interface VectorFunction {
 
     interface SimpleFunction extends VectorFunction {
         @Override
-        default void fillArray(Vec3[] array, ContextProvider provider) {
-            provider.fillAllDirectly(array, this);
+        default void fillArray(Vec3[] output, ContextProvider provider) {
+            provider.fillAllDirectly(output, this);
         }
 
         @Override
         default VectorFunction mapAll(Visitor visitor) {
-            return visitor.apply(this);
+            return visitor.visit(this);
         }
     }
 
@@ -84,11 +96,11 @@ public interface VectorFunction {
         }
 
         @Override
-        default void fillArray(Vec3[] array, ContextProvider provider) {
-            this.input().fillArray(array, provider);
+        default void fillArray(Vec3[] output, ContextProvider provider) {
+            this.input().fillArray(output, provider);
 
-            for(int $$2 = 0; $$2 < array.length; ++$$2) {
-                array[$$2] = this.transform(array[$$2]);
+            for(int $$2 = 0; $$2 < output.length; ++$$2) {
+                output[$$2] = this.transform(output[$$2]);
             }
         }
     }
@@ -106,26 +118,61 @@ public interface VectorFunction {
         }
 
         @Override
-        default void fillArray(Vec3[] array, ContextProvider provider) {
-            this.argument1().fillArray(array, provider);
+        default void fillArray(Vec3[] output, ContextProvider provider) {
+            this.argument1().fillArray(output, provider);
 
-            Vec3[] array2 = new Vec3[array.length];
+            Vec3[] array2 = new Vec3[output.length];
             this.argument2().fillArray(array2, provider);
 
-            for (int i = 0; i < array.length; ++i) {
-                array[i] = this.transform(array[i], array2[i]);
+            for (int i = 0; i < output.length; ++i) {
+                output[i] = this.transform(output[i], array2[i]);
             }
         }
     }
 
-    interface TransformerWithContext extends VectorFunction {
-        VectorFunction input();
+    interface MarkerOrMarked extends VectorFunction {
+        MarkerVectorFunction.Type type();
 
-        Vec3 transform(Vec3 input, FunctionContext context);
+        VectorFunction wrapped();
 
         @Override
-        default Vec3 compute(FunctionContext context) {
-            return this.transform(this.input().compute(context), context);
+        default VectorFunction mapAll(Visitor visitor) {
+            return visitor.visit(new MarkerVectorFunction(this.type(), this.wrapped().mapAll(visitor)));
+        }
+
+        @Override
+        default double minX() {
+            return this.wrapped().minX();
+        }
+
+        @Override
+        default double maxX() {
+            return this.wrapped().maxX();
+        }
+
+        @Override
+        default double minY() {
+            return this.wrapped().minY();
+        }
+
+        @Override
+        default double maxY() {
+            return this.wrapped().maxY();
+        }
+
+        @Override
+        default double minZ() {
+            return this.wrapped().minZ();
+        }
+
+        @Override
+        default double maxZ() {
+            return this.wrapped().maxZ();
+        }
+
+        @Override
+        default MapCodec<? extends VectorFunction> codec() {
+            return this.type().codec();
         }
     }
 }

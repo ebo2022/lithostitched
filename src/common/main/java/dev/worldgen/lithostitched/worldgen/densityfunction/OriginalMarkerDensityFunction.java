@@ -5,7 +5,7 @@ import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import org.jetbrains.annotations.NotNull;
 
-public class OriginalMarkerDensityFunction implements MarkerFunction {
+public class OriginalMarkerDensityFunction implements MarkerDensityFunction {
     public static final KeyDispatchDataCodec<OriginalMarkerDensityFunction> CODEC = KeyDispatchDataCodec.of(MapCodec.unit(new OriginalMarkerDensityFunction()));
 
 

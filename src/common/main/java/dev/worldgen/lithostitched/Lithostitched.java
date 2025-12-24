@@ -236,11 +236,15 @@ public final class Lithostitched {
 		consumer.accept("components", ComponentsVectorFunction.CODEC);
 		consumer.accept("cross", CrossVectorFunction.CODEC);
 		consumer.accept("constant", ConstantVectorFunction.CODEC);
+		consumer.accept("mul", MulVectorFunction.CODEC);
 		consumer.accept("noise_gradient", NoiseGradientVectorFunction.CODEC);
 		consumer.accept("normalize", NormalizeVectorFunction.CODEC);
 		consumer.accept("position", PositionVectorFunction.CODEC);
-		consumer.accept("scale", ScaleVectorFunction.CODEC);
 		consumer.accept("shifted_noise_gradient", ShiftedNoiseGradientVectorFunction.CODEC);
+
+		for (MarkerVectorFunction.Type type : MarkerVectorFunction.Type.values()) {
+			consumer.accept(type.getSerializedName(), type.codec());
+		}
 	}
 
 

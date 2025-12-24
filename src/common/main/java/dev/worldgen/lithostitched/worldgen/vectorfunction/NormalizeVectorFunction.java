@@ -18,6 +18,36 @@ public record NormalizeVectorFunction(VectorFunction input) implements VectorFun
     }
 
     @Override
+    public double minX() {
+        return 0;
+    }
+
+    @Override
+    public double maxX() {
+        return 1;
+    }
+
+    @Override
+    public double minY() {
+        return 0;
+    }
+
+    @Override
+    public double maxY() {
+        return 1;
+    }
+
+    @Override
+    public double minZ() {
+        return 0;
+    }
+
+    @Override
+    public double maxZ() {
+        return 1;
+    }
+
+    @Override
     public MapCodec<NormalizeVectorFunction> codec() {
         return CODEC;
     }

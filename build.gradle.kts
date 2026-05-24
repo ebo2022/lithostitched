@@ -6,11 +6,27 @@ plugins {
 repositories {
     cloche.librariesMinecraft()
     mavenCentral()
+    mavenLocal()
     cloche {
         main()
         mavenNeoforgedMeta()
         mavenNeoforged()
         mavenFabric()
+    }
+    // TODO: remove upon modrinth release
+    maven {
+        url = uri("https://maven.bawnorton.com/releases")
+        content {
+            includeGroup("com.github.bawnorton.mixinsquared")
+        }
+    }
+    maven {
+        name = "CaffeineMC snapshots"
+        url = uri("https://maven.caffeinemc.net/snapshots")
+    }
+    maven {
+        name = "CaffeineMC releases"
+        url = uri("https://maven.caffeinemc.net/releases")
     }
 }
 
@@ -61,6 +77,7 @@ cloche {
 
         dependencies {
             fabricApi("0.116.1")
+            api("com.ishland.flowsched:flowsched")
         }
 
         includedClient()
@@ -85,6 +102,7 @@ cloche {
 
         dependencies {
             fabricApi("0.148.0")
+            modImplementation("com.ishland.c2me:c2me:0.3.7+alpha.0.69-dirty")
         }
 
         includedClient()

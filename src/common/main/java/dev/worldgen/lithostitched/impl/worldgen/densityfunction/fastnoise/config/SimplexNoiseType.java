@@ -32,12 +32,14 @@ public class SimplexNoiseType extends FastNoiseConfig {
         this.octaves = octaves;
         this.lacunarity = lacunarity;
         this.gain = gain;
+    }
 
-        fnl.SetNoiseType(FNL.NoiseType.OpenSimplex2S);
-        fnl.SetFractalType(fractalType);
-        octaves.ifPresent(fnl::SetFractalOctaves);
-        lacunarity.ifPresent(fnl::SetFractalLacunarity);
-        gain.ifPresent(fnl::SetFractalGain);
+    @Override
+    public void configure(Builder builder) {
+        builder.noiseType(FNL.NoiseType.OpenSimplex2S).fractalType(this.fractalType);
+        octaves.ifPresent(builder::fractalOctaves);
+        lacunarity.ifPresent(builder::fractalLacunarity);
+        gain.ifPresent(builder::fractalGain);
     }
 
     @Override

@@ -14,7 +14,11 @@ public class PerlinNoiseType extends FastNoiseConfig {
 
     public PerlinNoiseType(float frequency, int salt) {
         super(frequency, salt);
-        fnl.SetNoiseType(FNL.NoiseType.Perlin);
+    }
+
+    @Override
+    public void configure(Builder builder) {
+        builder.noiseType(FNL.NoiseType.Perlin);
     }
 
     @Override

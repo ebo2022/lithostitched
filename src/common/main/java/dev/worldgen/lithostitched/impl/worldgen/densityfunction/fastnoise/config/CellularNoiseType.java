@@ -27,11 +27,6 @@ public class CellularNoiseType extends FastNoiseConfig {
         this.distanceFunction = distanceFunction;
         this.returnType = returnType;
         this.jitter = jitter;
-
-        fnl.SetNoiseType(FNL.NoiseType.Cellular);
-        fnl.SetCellularDistanceFunction(distanceFunction.internal);
-        fnl.SetCellularReturnType(returnType.internal);
-        fnl.SetCellularJitter(jitter);
     }
 
     public DistanceFunction distanceFunction() {
@@ -44,6 +39,14 @@ public class CellularNoiseType extends FastNoiseConfig {
 
     private float jitter() {
         return jitter;
+    }
+
+    @Override
+    public void configure(Builder builder) {
+        builder.noiseType(FNL.NoiseType.Cellular)
+                .cellularDistanceFunction(this.distanceFunction.internal)
+                .cellularReturnType(this.returnType.internal)
+                .cellularJitter(this.jitter);
     }
 
     @Override

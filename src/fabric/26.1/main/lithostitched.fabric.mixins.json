@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "common.c2me.BytecodeGenRegistryMixin",
+    "common.c2me.FoldConstantsMixin",
     "common.c2me.McToAstMixin",
     "common.predicate.RegistryLoadTaskMixin",
     "common.BeardifierMixin"

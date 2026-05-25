@@ -7,6 +7,7 @@ import com.ishland.c2me.opts.dfc.common.ast.binary.MaxNode;
 import com.ishland.c2me.opts.dfc.common.ast.binary.MinNode;
 import com.ishland.c2me.opts.dfc.common.ast.binary.MulNode;
 import com.ishland.c2me.opts.dfc.common.ast.misc.ConstantNode;
+import com.ishland.c2me.opts.dfc.common.ast.misc.CoordinateNode;
 import com.ishland.c2me.opts.dfc.common.ast.unary.NegMulNode;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import dev.worldgen.lithostitched.compat.c2me.ast.unary.*;
@@ -35,6 +36,11 @@ public abstract class McToAstMixin {
             case SqrtDensityFunction f -> new SqrtNode(toAst(f.argument()));
 
             // misc
+            case AxisDensityFunction f -> new CoordinateNode(switch (f.axis()) {
+                case X -> CoordinateNode.Axis.X;
+                case Y -> CoordinateNode.Axis.Y;
+                case Z -> CoordinateNode.Axis.Z;
+            });
             case MixDensityFunction f -> {
                 // further optimization is handled in FoldConstants
                 AstNode clampedInput = new MinNode(new ConstantNode(1), new MaxNode(new ConstantNode(0), toAst(f.input())));

@@ -10,6 +10,7 @@ import com.ishland.c2me.opts.dfc.common.ast.misc.ConstantNode;
 import com.ishland.c2me.opts.dfc.common.ast.misc.CoordinateNode;
 import com.ishland.c2me.opts.dfc.common.ast.unary.NegMulNode;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import dev.worldgen.lithostitched.compat.c2me.ast.misc.SelectNode;
 import dev.worldgen.lithostitched.compat.c2me.ast.unary.*;
 import dev.worldgen.lithostitched.impl.worldgen.densityfunction.*;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -41,26 +42,7 @@ public abstract class McToAstMixin {
                 case Y -> CoordinateNode.Axis.Y;
                 case Z -> CoordinateNode.Axis.Z;
             });
-            case MixDensityFunction f -> {
-                // further optimization is handled in FoldConstants
-                AstNode clampedInput = new MinNode(new ConstantNode(1), new MaxNode(new ConstantNode(0), toAst(f.input())));
-                yield new AddNode(
-                        new MulNode(
-                                toAst(f.argument1()),
-                                new AddNode(
-                                        new ConstantNode(1),
-                                        new MulNode(
-                                                clampedInput,
-                                                new ConstantNode(-1)
-                                        )
-                                )
-                        ),
-                        new MulNode(
-                                toAst(f.argument2()),
-                                clampedInput
-                        )
-                );
-            }
+            case SelectDensityFunction f -> new SelectNode(toAst(f.input()), toAst(f.fallback()), f.selections().stream().map(s -> new SelectNode.Selection(s.range(), toAst(s.function()))).toArray(SelectNode.Selection[]::new));
             default -> original;
         };
     }
